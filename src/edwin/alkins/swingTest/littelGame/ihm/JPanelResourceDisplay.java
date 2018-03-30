@@ -3,6 +3,8 @@ package edwin.alkins.swingTest.littelGame.ihm;
 import javax.swing.JPanel;
 
 import edwin.alkins.swingTest.littelGame.core.ManagerIHM;
+import edwin.alkins.swingTest.littelGame.core.ManagerProduction;
+import edwin.alkins.swingTest.littelGame.core.SetupParameters;
 import edwin.alkins.swingTest.littelGame.exception.ExceptionCantAddJComponentInFrame;
 import edwin.alkins.swingTest.littelGame.exception.ExceptionComponentIsAlreadyInTheContainer;
 import edwin.alkins.swingTest.littelGame.exception.ExceptionComponentIsNotInTheContainer;
@@ -21,6 +23,7 @@ public class JPanelResourceDisplay extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -8709178043525895920L;
+	private boolean t;
 
 	/**
 	 * Create the panel.
@@ -58,7 +61,7 @@ public class JPanelResourceDisplay extends JPanel {
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_1);
 		
-		JLabel resource1 = new JLabel("New label");
+		JLabel resource1 = new JLabel("Metal");
 		horizontalBox.add(resource1);
 		
 		Component horizontalGlue_2 = Box.createHorizontalGlue();
@@ -82,8 +85,28 @@ public class JPanelResourceDisplay extends JPanel {
 		Component horizontalGlue_5 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_5);
 		
+		JButton btnNewButton = new JButton("New button");
+		horizontalBox.add(btnNewButton);
+		
 		Component glue = Box.createGlue();
 		globalVerticalBox.add(glue);
+		SetupParameters s = new SetupParameters();
+		ManagerProduction p = s.getProduction();
+		p.addHandleurOnProduction(new ManagerProduction.ProducesHandler() {
+			@Override
+			public void resource(String name, double quantity) {
+				if(name.equals("Metal"))
+					resource1.setText(Math.round(quantity)+"");
+			}
+		});
+		t = true;
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(t) p.stopProduction();
+				else p.startProduction();
+				t = !t;
+			}
+		});
 	}
 
 }
