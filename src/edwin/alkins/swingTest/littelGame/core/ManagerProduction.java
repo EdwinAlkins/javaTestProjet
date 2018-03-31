@@ -8,6 +8,11 @@ import java.util.Set;
 
 public class ManagerProduction extends Thread{
 
+	public static final String METAL = "Metal";
+	public static final String CRISTAUX = "Cristaux";
+	public static final String DEUTERIUM = "Deuterium";
+	public static final String ENERGIE = "Energie";
+	
 	private long lastCurrentTime;
 	private Map<String,IResource> resource;
 	private volatile boolean isProduces;
@@ -22,6 +27,8 @@ public class ManagerProduction extends Thread{
 		this.listOfActionOnProduction = new HashSet<>();
 		IResource metal = initializationProductionOfMetal();
 		this.resource.put(metal.getName(),metal);
+		IResource cristaux = initializationProductionOfCristaux();
+		this.resource.put(cristaux.getName(),cristaux);
 		this.isProduces = true;
 	}
 	
@@ -41,7 +48,22 @@ public class ManagerProduction extends Thread{
 		productionOfMetal.put(7, 600);
 		productionOfMetal.put(8, 700);
 		productionOfMetal.put(9, 800);
-		return new Resource("Metal", productionOfMetal);
+		return new Resource(METAL, productionOfMetal);
+	}
+	
+	private IResource initializationProductionOfCristaux() {
+		Map<Integer,Integer> productionOfCristaux = new HashMap<>();
+		productionOfCristaux.put(0, 10);
+		productionOfCristaux.put(1, 50);
+		productionOfCristaux.put(2, 100);
+		productionOfCristaux.put(3, 200);
+		productionOfCristaux.put(4, 300);
+		productionOfCristaux.put(5, 400);
+		productionOfCristaux.put(6, 500);
+		productionOfCristaux.put(7, 600);
+		productionOfCristaux.put(8, 700);
+		productionOfCristaux.put(9, 800);
+		return new Resource(CRISTAUX, productionOfCristaux);
 	}
 	
 	public synchronized void stopProduction() {

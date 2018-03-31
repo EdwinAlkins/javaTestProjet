@@ -6,7 +6,6 @@ import edwin.alkins.swingTest.littelGame.core.ManagerIHM;
 import edwin.alkins.swingTest.littelGame.core.ManagerProduction;
 import edwin.alkins.swingTest.littelGame.core.SetupParameters;
 import edwin.alkins.swingTest.littelGame.exception.ExceptionCantAddJComponentInFrame;
-import edwin.alkins.swingTest.littelGame.exception.ExceptionComponentIsAlreadyInTheContainer;
 import edwin.alkins.swingTest.littelGame.exception.ExceptionComponentIsNotInTheContainer;
 
 import javax.swing.Box;
@@ -61,25 +60,25 @@ public class JPanelResourceDisplay extends JPanel {
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_1);
 		
-		JLabel resource1 = new JLabel("Metal");
+		JLabel resource1 = new JLabelResource(ManagerProduction.METAL);
 		horizontalBox.add(resource1);
 		
 		Component horizontalGlue_2 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_2);
 		
-		JLabel resource2 = new JLabel("New label");
+		JLabel resource2 = new JLabelResource(ManagerProduction.CRISTAUX);
 		horizontalBox.add(resource2);
 		
 		Component horizontalGlue_3 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_3);
 		
-		JLabel resource3 = new JLabel("New label");
+		JLabel resource3 = new JLabelResource(ManagerProduction.DEUTERIUM);
 		horizontalBox.add(resource3);
 		
 		Component horizontalGlue_4 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_4);
 		
-		JLabel resource4 = new JLabel("New label");
+		JLabel resource4 = new JLabelResource(ManagerProduction.ENERGIE);
 		horizontalBox.add(resource4);
 		
 		Component horizontalGlue_5 = Box.createHorizontalGlue();
@@ -95,8 +94,10 @@ public class JPanelResourceDisplay extends JPanel {
 		p.addHandleurOnProduction(new ManagerProduction.ProducesHandler() {
 			@Override
 			public void resource(String name, double quantity) {
-				if(name.equals("Metal"))
+				if(name.equals(ManagerProduction.METAL))
 					resource1.setText(Math.round(quantity)+"");
+				if(name.equals(ManagerProduction.CRISTAUX))
+					resource2.setText(Math.round(quantity)+"");
 			}
 		});
 		t = true;
