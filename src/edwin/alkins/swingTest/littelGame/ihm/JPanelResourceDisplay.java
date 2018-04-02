@@ -60,26 +60,26 @@ public class JPanelResourceDisplay extends JPanel {
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_1);
 		
-		JLabel resource1 = new JLabelResource(ManagerProduction.METAL);
-		horizontalBox.add(resource1);
+		JLabel resourceMetal = new JLabelResource(ManagerProduction.MINERAUX);
+		horizontalBox.add(resourceMetal);
 		
 		Component horizontalGlue_2 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_2);
 		
-		JLabel resource2 = new JLabelResource(ManagerProduction.CRISTAUX);
-		horizontalBox.add(resource2);
+		JLabel resourceCristaux = new JLabelResource(ManagerProduction.NOURRITURE);
+		horizontalBox.add(resourceCristaux);
 		
 		Component horizontalGlue_3 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_3);
 		
-		JLabel resource3 = new JLabelResource(ManagerProduction.DEUTERIUM);
-		horizontalBox.add(resource3);
+		JLabel resourceDeuterium = new JLabelResource(ManagerProduction.POPULATION);
+		horizontalBox.add(resourceDeuterium);
 		
 		Component horizontalGlue_4 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_4);
 		
-		JLabel resource4 = new JLabelResource(ManagerProduction.ENERGIE);
-		horizontalBox.add(resource4);
+		JLabel resourceEnergie = new JLabelResource(ManagerProduction.ENERGIE);
+		horizontalBox.add(resourceEnergie);
 		
 		Component horizontalGlue_5 = Box.createHorizontalGlue();
 		horizontalBox.add(horizontalGlue_5);
@@ -94,10 +94,14 @@ public class JPanelResourceDisplay extends JPanel {
 		p.addHandleurOnProduction(new ManagerProduction.ProducesHandler() {
 			@Override
 			public void resource(String name, double quantity) {
-				if(name.equals(ManagerProduction.METAL))
-					resource1.setText(Math.round(quantity)+"");
-				if(name.equals(ManagerProduction.CRISTAUX))
-					resource2.setText(Math.round(quantity)+"");
+				if(name.equals(ManagerProduction.MINERAUX))
+					resourceMetal.setText(Math.round(quantity)+"");
+				if(name.equals(ManagerProduction.NOURRITURE))
+					resourceCristaux.setText(Math.round(quantity)+"");
+				if(name.equals(ManagerProduction.POPULATION))
+					resourceDeuterium.setText(Math.round(quantity)+"");
+				if(name.equals(ManagerProduction.ENERGIE))
+					resourceEnergie.setText(Math.round(quantity)+"");
 			}
 		});
 		t = true;

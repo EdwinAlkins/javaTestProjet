@@ -2,26 +2,46 @@ package edwin.alkins.swingTest.littelGame.core;
 
 import java.util.Map;
 
+import edwin.alkins.swingTest.littelGame.exception.ExeptionLowResource;
+
 public class Resource implements IResource {
 
 	private final String name;
-	private final Map<Integer,Integer> productionDependingOnTheLevel;
+	private float multiplicatorOfProduction;
 	private int currentLvl;
 	private double quantity;
+	private int nomberOfUsine;
+	private float multiplicatorOfUpgrade;
+	private ManagerProduction resource;
+	private int useMinerauxToUpgrade;
+	private String resourceUse;
 	
-	public Resource(String name, Map<Integer,Integer> production) {
+	public Resource(String name, float multiplicator, ManagerProduction resource) {
 		this.name = name;
-		this.productionDependingOnTheLevel = production;
+		this.multiplicatorOfProduction = multiplicator;
 		this.quantity = 0d;
-		this.currentLvl = 0;
+		this.currentLvl = 1;
+		this.nomberOfUsine = 1;
+		this.resource = resource;
+		this.useMinerauxToUpgrade = 50;
+	}
+	
+	public void setMultiplicatorOfUpgrade(float multiplicator, String resourceUse) {
+		this.multiplicatorOfUpgrade = multiplicator;
+		this.resourceUse = resourceUse;
+	}
+	
+	public synchronized void upgrade() throws ExeptionLowResource {
+		this.resource.getResource().get(resourceUse).use(this.multiplicatorOfUpgrade*this.useMinerauxToUpgrade);
+		this.currentLvl++;
 	}
 	
 	/* (non-Javadoc)
 	 * @see edwin.alkins.swingTest.littelGame.core.IResource#updateQuantity(java.lang.Long)
 	 */
 	@Override
-	public void updateQuantity(Long timePassOnMilis) {
-		this.quantity += new Double(this.productionDependingOnTheLevel.get(this.currentLvl))*timePassOnMilis*0.001;
+	public synchronized void updateQuantity(Long timePassOnMilis) {
+		this.quantity += new Double(multiplicatorOfProduction*currentLvl)*new Double(timePassOnMilis)*0.001d/60d * new Double(nomberOfUsine);
 	}
 	
 	/* (non-Javadoc)
@@ -38,5 +58,10 @@ public class Resource implements IResource {
 	@Override
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public void use(float f) throws ExeptionLowResource {
+		if(this.quantity - f < 0) throw new ExeptionLowResource();
 	}
 }
