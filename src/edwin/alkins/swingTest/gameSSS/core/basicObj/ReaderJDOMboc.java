@@ -3,6 +3,9 @@ package edwin.alkins.swingTest.gameSSS.core.basicObj;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 import org.jdom2.Attribute;
@@ -27,84 +30,77 @@ public class ReaderJDOMboc {
 			e.printStackTrace();
 		}
 		racine = document.getRootElement();
+	}
+
+	public BasicObjectCore getSave() {
 		try {
-			firt();
+			String type = racine.getAttribute("type").getValue();
+			if (type.equals(BasicObjectCore.class.getName())) {
+				String name = racine.getAttribute("name").getValue();
+				BasicObjectCore boc = new BasicObjectCore(name);
+				return next(boc,racine);
+			}
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException
 				| InvocationTargetException | IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void firt() throws InstantiationException, IllegalAccessException, ClassNotFoundException,
-			IllegalArgumentException, InvocationTargetException, IOException {
-		String type = racine.getAttribute("type").getValue();
-		if (type.equals(BasicObjectCore.class.getName())) {
-			String name = racine.getAttribute("name").getValue();
-			Object o = this.getClass().getClassLoader().loadClass(type).newInstance();
-			for (Method fun : o.getClass().getMethods()) {
-				if (fun.getName().equals("setName"))
-					fun.invoke(o, name);
-			}
-			List listElement = racine.getChildren();
-			Iterator i = listElement.iterator();
-			while (i.hasNext()) {
-				Element courant = (Element) i.next();
-				next((BasicObjectCore)o,courant);
-			}
-			System.out.println(o);
-		}
+		return new BasicObjectCore();
 	}
 
 	private BasicObjectCore next(BasicObjectCore boc, Element el) throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, IllegalArgumentException, InvocationTargetException, IOException {
-		String type = el.getAttribute("type").getValue();
-		if (type.equals(BasicObjectCore.class.getName())) {
-			String name = el.getAttribute("name").getValue();
-			Object o = this.getClass().getClassLoader().loadClass(type).newInstance();
-			for (Method fun : o.getClass().getMethods()) {
-				if (fun.getName().equals("setName"))
-					fun.invoke(o, name);
+		List listElement = el.getChildren();
+		Iterator i = listElement.iterator();
+		while (i.hasNext()) {
+			Element courant = (Element) i.next();
+			String param = courant.getValue();
+			String type = courant.getAttribute("type").getValue();
+			if (type.equals(BasicObjectCore.class.getName())) {
+				String name = courant.getAttribute("name").getValue();
+				BasicObjectCore tmpBoc = new BasicObjectCore(name);
+				boc.setValue(courant.getName(),next(tmpBoc,courant));
 			}
-			List listElement = el.getChildren();
-			Iterator i = listElement.iterator();
-			while (i.hasNext()) {
-				Element courant = (Element) i.next();
-				next((BasicObjectCore)o,courant);
-			}
-			boc.setValue(el.getName(), o);
-		}
-		else if(type.equals(ArrayList.class.getName())) {
-			ArrayList<Object> list = new ArrayList<>();
-			List listElement = racine.getChildren();
-			Iterator i = listElement.iterator();
-			while (i.hasNext()) {
-				Element courant = (Element) i.next();
-				String type1 = el.getAttribute("type").getValue();
-				if (type1.equals(BasicObjectCore.class.getName())) {
-					String name = el.getAttribute("name").getValue();
-					Object o = this.getClass().getClassLoader().loadClass(type1).newInstance();
-					for (Method fun : o.getClass().getMethods()) {
-						if (fun.getName().equals("setName"))
-							fun.invoke(o, name);
+			else if(type.equals(ArrayList.class.getName())) {
+				List dataList = new ArrayList<>();
+				List array_listElement = courant.getChildren();
+				Iterator array_i = array_listElement.iterator();
+				while (array_i.hasNext()) {
+					Element array_el = (Element) array_i.next();
+					String array_param = array_el.getValue();
+					String array_type = array_el.getAttribute("type").getValue();
+					if (array_type.equals(BasicObjectCore.class.getName())) {
+						String name = array_el.getAttribute("name").getValue();
+						BasicObjectCore tmpBoc = new BasicObjectCore(name);
+						//boc.setValue(array_el.getName(),next(tmpBoc,array_el));
+						dataList.add(next(tmpBoc,array_el));
 					}
-					if(courant.getContentSize()>1)
-						list.add(next((BasicObjectCore)o,courant));
-					else 
-						list.add(o);
+					else
+						dataList.add(getObj(array_type,array_param));
 				}
+				boc.setValue(courant.getName(), dataList);
 			}
-		}
-		else {
-			String param = el.getValue();
-			Object o = null;
-			if(type.equals(String.class.getName()))
-				o = new String(param);
-			else if(type.equals(Integer.class.getName()))
-				o = new Integer(param);
-			else if(type.equals(String.class.getName()))
-				o = new Float(param);
-			boc.setValue(el.getName(), o);
+			else
+				boc.setValue(courant.getName(),getObj(type,param));
 		}
 		return boc;
+	}
+	
+	private Object getObj(String type, String value) {
+		Object o = new Object();
+		if(type.equals(String.class.getName()))
+			o = new String(value);
+		else if(type.equals(Integer.class.getName()))
+			o = new Integer(value);
+		else if(type.equals(Float.class.getName()))
+			o = new Float(value);
+		else if(type.equals(BigInteger.class.getName()))
+			o = new BigInteger(value);
+		else if(type.equals(Time.class.getName()))
+			o = new Time(0).valueOf(value);
+		else if(type.equals(Date.class.getName()))
+			o = new Date(0).valueOf(value);
+		else
+			o = new String("ERROR");
+		return o;
 	}
 }

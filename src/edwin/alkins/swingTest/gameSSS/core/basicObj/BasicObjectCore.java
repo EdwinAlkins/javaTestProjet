@@ -67,6 +67,6 @@ public class BasicObjectCore {
 	
  	@Override
 	public String toString() {
-		return "["+this.name + "=" + attributs+"]";
+		return "("+this.name + "=" + attributs+")";
 	}
 }

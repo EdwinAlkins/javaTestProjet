@@ -1,7 +1,6 @@
 package edwin.alkins.swingTest.gameSSS.core.basicObj;
 
 import java.io.FileOutputStream;
-import java.io.Serializable;
 import java.util.List;
 
 import org.jdom2.Attribute;
@@ -27,7 +26,6 @@ public class BuilderJDOMboc {
 		this.document = new Document(racine);
 		buildDom(boc, racine);
 		id++;
-		affiche();
 		enregistre(this.getClass().getResource(RES).getPath()+boc.getName()+id+".xml");
 	}
 
