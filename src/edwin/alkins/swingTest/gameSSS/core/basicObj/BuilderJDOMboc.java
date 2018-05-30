@@ -1,6 +1,7 @@
 package edwin.alkins.swingTest.gameSSS.core.basicObj;
 
 import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 
 import org.jdom2.Attribute;
@@ -65,13 +66,17 @@ public class BuilderJDOMboc {
 		return father;
 	}
 
-	private void affiche() {
+	public void affiche(PrintStream p) {
 		try {
 			XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
-			sortie.output(document, System.out);
+			sortie.output(document, p);
 		} catch (java.io.IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getRacine() {
+		return racine.toString();
 	}
 
 	private void enregistre(String fichier) {

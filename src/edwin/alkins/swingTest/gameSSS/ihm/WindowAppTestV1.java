@@ -12,6 +12,8 @@ import edwin.alkins.swingTest.gameSSS.core.basicObj.BuilderJDOMboc;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IactionShip;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.ReaderJDOMboc;
+import edwin.alkins.swingTest.gameSSS.ihm.testihm.TestScript;
+
 import javax.swing.JInternalFrame;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
@@ -37,6 +39,8 @@ import java.awt.event.ActionEvent;
 public class WindowAppTestV1 {
 
 	private JFrame frame;
+	private JTextPane txtp_info;
+	private BasicObjectCore secteur0;
 	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/script/";
 
 	/**
@@ -88,7 +92,7 @@ public class WindowAppTestV1 {
 		listVaiseau.add(vaiseau0);
 		listVaiseau.add(vaiseau1);
 		
-		IBasicObjectCore secteur0 = new BasicObjectCore("secteur");
+		secteur0 = new BasicObjectCore("secteur");
 		secteur0.setValue("id", new Integer(0));
 		secteur0.setValue("name", new String("secteur de naissance"));
 		secteur0.setValue("list_vaiseaux", listVaiseau);
@@ -106,12 +110,8 @@ public class WindowAppTestV1 {
 				}
 			}
 		});*/
-		try {
-			initScript(secteur0);
-		} catch (FileNotFoundException | ScriptException e) {
-			e.printStackTrace();
-		}
-		System.out.println(secteur0);
+		txtp_info.setText(secteur0.toString());
+		
 		
 		/*BasicObjectCore o = new BasicObjectCore("bdd_test");
 		ArrayList<GeneticObjectBusiness> initDataTable = AccessBD.getInstance().getActDAO().initDataTable();
@@ -141,16 +141,30 @@ public class WindowAppTestV1 {
 		JComboBox cb_listElement = new JComboBox();
 		panel.add(cb_listElement);
 		
-		JButton btn_rechercher = new JButton("rechercher");
+		JButton btn_rechercher = new JButton("lancée script");
 		panel.add(btn_rechercher);
+		btn_rechercher.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							runScript();
+							txtp_info.setText(txtp_info.getText()+"\n\n"+secteur0.toString());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		});
 		
-		JButton btn_newboc = new JButton("new BOC");
+		JButton btn_newboc = new JButton("modifier script");
 		btn_newboc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							creatBoc frame = new creatBoc();
+							TestScript frame = new TestScript();
 							frame.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -161,13 +175,13 @@ public class WindowAppTestV1 {
 		});
 		panel.add(btn_newboc);
 		
-		JTextPane txtp_info = new JTextPane();
+		txtp_info = new JTextPane();
 		txtp_info.setEditable(false);
 		frame.getContentPane().add(txtp_info, BorderLayout.CENTER);
 	}
 
 	
-	private void initScript(IBasicObjectCore secteur0) throws FileNotFoundException, ScriptException {
+	private void runScript() throws FileNotFoundException, ScriptException {
 		ScriptEngineManager manager = new ScriptEngineManager();
 		ScriptEngine engine = manager.getEngineByName("JavaScript");
 		engine.eval(new FileReader(new File(this.getClass().getResource(RES).getPath() + "actionShip.js")));

@@ -47,7 +47,7 @@ public class TestScript extends JFrame {
 	private ScriptEngineManager manager;
 	private ScriptEngine engine;
 	private JTextArea txtActionResult;
-	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/script/";
+	private static final String RES = "/script/";
 	private JPanel panel;
 	private JButton btnNewButton;
 
@@ -83,7 +83,7 @@ public class TestScript extends JFrame {
 		txtActionResult = new JTextArea();
 		try {
 			StringBuffer strb = new StringBuffer();
-			BufferedReader br = new BufferedReader(new FileReader(new File(this.getClass().getResource(RES).getPath() + "actionShip.js")));
+			BufferedReader br = new BufferedReader(new FileReader(new File(System.getProperty("user.dir") + RES + "actionShip.js")));
 			String line;
 			while ((line = br.readLine()) != null) {
 				strb.append(line+'\n');
@@ -104,7 +104,7 @@ public class TestScript extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				FileWriter fichier;
 				try {
-					fichier = new FileWriter(new File(this.getClass().getResource(RES).getPath() + "actionShip.js"));
+					fichier = new FileWriter(new File(System.getProperty("user.dir") + RES + "actionShip.js"));
 					fichier.write (txtActionResult.getText());
 				    fichier.close();
 				} catch (IOException e) {
