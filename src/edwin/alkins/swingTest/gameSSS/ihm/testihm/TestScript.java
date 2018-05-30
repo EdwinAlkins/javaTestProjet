@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -47,6 +48,8 @@ public class TestScript extends JFrame {
 	private ScriptEngine engine;
 	private JTextArea txtActionResult;
 	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/script/";
+	private JPanel panel;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -78,13 +81,37 @@ public class TestScript extends JFrame {
 		setContentPane(contentPane);
 		
 		txtActionResult = new JTextArea();
+		try {
+			StringBuffer strb = new StringBuffer();
+			BufferedReader br = new BufferedReader(new FileReader(new File(this.getClass().getResource(RES).getPath() + "actionShip.js")));
+			String line;
+			while ((line = br.readLine()) != null) {
+				strb.append(line+'\n');
+			}
+			br.close();
+			txtActionResult.setText(strb.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		JScrollPane containeurTxtActionResult = new JScrollPane(txtActionResult);
 		contentPane.add(containeurTxtActionResult, BorderLayout.CENTER);
-			initScript();
-	}
-
-	private void initScript() {
 		
+		panel = new JPanel();
+		containeurTxtActionResult.setColumnHeaderView(panel);
+		
+		btnNewButton = new JButton("Modifier");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FileWriter fichier;
+				try {
+					fichier = new FileWriter(new File(this.getClass().getResource(RES).getPath() + "actionShip.js"));
+					fichier.write (txtActionResult.getText());
+				    fichier.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		panel.add(btnNewButton);
 	}
-
 }
