@@ -32,12 +32,12 @@ public class ReaderJDOMboc {
 		racine = document.getRootElement();
 	}
 
-	public BasicObjectCore getSave() {
+	public IBasicObjectCore getSave() {
 		try {
 			String type = racine.getAttribute("type").getValue();
 			if (type.equals(BasicObjectCore.class.getName())) {
 				String name = racine.getAttribute("name").getValue();
-				BasicObjectCore boc = new BasicObjectCore(name);
+				IBasicObjectCore boc = new BasicObjectCore(name);
 				return next(boc,racine);
 			}
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException
@@ -47,7 +47,7 @@ public class ReaderJDOMboc {
 		return new BasicObjectCore();
 	}
 
-	private BasicObjectCore next(BasicObjectCore boc, Element el) throws InstantiationException, IllegalAccessException,
+	private IBasicObjectCore next(IBasicObjectCore boc, Element el) throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, IllegalArgumentException, InvocationTargetException, IOException {
 		List listElement = el.getChildren();
 		Iterator i = listElement.iterator();
@@ -57,7 +57,7 @@ public class ReaderJDOMboc {
 			String type = courant.getAttribute("type").getValue();
 			if (type.equals(BasicObjectCore.class.getName())) {
 				String name = courant.getAttribute("name").getValue();
-				BasicObjectCore tmpBoc = new BasicObjectCore(name);
+				IBasicObjectCore tmpBoc = new BasicObjectCore(name);
 				boc.setValue(courant.getName(),next(tmpBoc,courant));
 			}
 			else if(type.equals(ArrayList.class.getName())) {
@@ -70,7 +70,7 @@ public class ReaderJDOMboc {
 					String array_type = array_el.getAttribute("type").getValue();
 					if (array_type.equals(BasicObjectCore.class.getName())) {
 						String name = array_el.getAttribute("name").getValue();
-						BasicObjectCore tmpBoc = new BasicObjectCore(name);
+						IBasicObjectCore tmpBoc = new BasicObjectCore(name);
 						//boc.setValue(array_el.getName(),next(tmpBoc,array_el));
 						dataList.add(next(tmpBoc,array_el));
 					}

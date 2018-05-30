@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="src/edwin/alkins/swingTest/gameSSS/lib/jdom-2.0.6-junit.jar"/>
 	<classpathentry kind="lib" path="src/edwin/alkins/swingTest/gameSSS/lib/jdom-2.0.6-sources.jar"/>
 	<classpathentry kind="lib" path="src/edwin/alkins/swingTest/gameSSS/lib/jdom-2.0.6.jar"/>
+	<classpathentry kind="lib" path="src/edwin/alkins/swingTest/gameSSS/lib/jackson-all-1.9.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

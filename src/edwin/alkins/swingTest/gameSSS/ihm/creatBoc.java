@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BuilderJDOMboc;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
@@ -22,6 +23,14 @@ import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.awt.event.ActionEvent;
 
 public class creatBoc extends JFrame {
@@ -31,6 +40,7 @@ public class creatBoc extends JFrame {
 	private ScriptEngine engine;
 	private JTextArea txtActionResult;
 	public JTextArea txtScriptArea;
+	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/script/";
 
 	/**
 	 * Create the frame.
@@ -59,12 +69,23 @@ public class creatBoc extends JFrame {
 		btnAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent eventAction) {
 				try {
-					engine.eval(txtScriptArea.getText());
+					//engine.eval(txtScriptArea.getText());
+					StringBuffer script = new StringBuffer();
+					File f = new File(this.getClass().getResource(RES).getPath() + "script0.js");
+					System.out.println(f.exists());
+					BufferedReader br = new BufferedReader(new FileReader(f));
+					String line;
+					while ((line = br.readLine()) != null) {
+						System.out.println(line);
+						script.append(line);
+					}
+					br.close();
+					engine.eval(script.toString());
 					Invocable inv = (Invocable) engine;
 			        Object result = inv.invokeFunction("newBoc", new BasicObjectCore());
 			        txtActionResult.setText(result.toString());
-			        new BuilderJDOMboc((BasicObjectCore)result);
-				} catch (ScriptException | NoSuchMethodException e) {
+			        new BuilderJDOMboc((IBasicObjectCore)result);
+				} catch (ScriptException | NoSuchMethodException | IOException e) {
 					e.printStackTrace();
 				}
 			}

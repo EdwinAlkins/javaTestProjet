@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BuilderJDOMboc;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.IactionShip;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.ReaderJDOMboc;
 import javax.swing.JInternalFrame;
 import java.awt.BorderLayout;
@@ -17,17 +19,25 @@ import javax.swing.JTextPane;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import javax.swing.JList;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.AbstractListModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.DropMode;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.math.BigInteger;
 import java.awt.event.ActionEvent;
 
 public class WindowAppTestV1 {
 
 	private JFrame frame;
+	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/script/";
 
 	/**
 	 * Launch the application.
@@ -54,12 +64,12 @@ public class WindowAppTestV1 {
 	}
 
 	private void instance() {
-		BasicObjectCore arme0 = new BasicObjectCore("arme");
+		IBasicObjectCore arme0 = new BasicObjectCore("arme");
 		arme0.setValue("name", new String("blasteur"));
 		arme0.setValue("atk", new Integer(10));
 		arme0.setValue("vitesse", new Float(20f));
 		
-		BasicObjectCore arme1 = new BasicObjectCore("arme");
+		IBasicObjectCore arme1 = new BasicObjectCore("arme");
 		arme1.setValue("name", new String("canion"));
 		arme1.setValue("atk", new Integer(100));
 		arme1.setValue("vitesse", new Float(10f));
@@ -78,14 +88,14 @@ public class WindowAppTestV1 {
 		listVaiseau.add(vaiseau0);
 		listVaiseau.add(vaiseau1);
 		
-		BasicObjectCore secteur0 = new BasicObjectCore("secteur");
+		IBasicObjectCore secteur0 = new BasicObjectCore("secteur");
 		secteur0.setValue("id", new Integer(0));
 		secteur0.setValue("name", new String("secteur de naissance"));
 		secteur0.setValue("list_vaiseaux", listVaiseau);
 		
 		new BuilderJDOMboc(secteur0);
-		ReaderJDOMboc rboc = new ReaderJDOMboc("bdd_test1.xml");
-		BasicObjectCore save = rboc.getSave();
+		/*ReaderJDOMboc rboc = new ReaderJDOMboc("bdd_test1.xml");
+		IBasicObjectCore save = rboc.getSave();
 		ArrayList<BasicObjectCore> list = (ArrayList<BasicObjectCore>)save.getValue("list_el");
 		System.out.println(list.size());
 		list.forEach(new Consumer<BasicObjectCore>() {
@@ -95,7 +105,13 @@ public class WindowAppTestV1 {
 					System.out.println(t);
 				}
 			}
-		});
+		});*/
+		try {
+			initScript(secteur0);
+		} catch (FileNotFoundException | ScriptException e) {
+			e.printStackTrace();
+		}
+		System.out.println(secteur0);
 		
 		/*BasicObjectCore o = new BasicObjectCore("bdd_test");
 		ArrayList<GeneticObjectBusiness> initDataTable = AccessBD.getInstance().getActDAO().initDataTable();
@@ -150,4 +166,16 @@ public class WindowAppTestV1 {
 		frame.getContentPane().add(txtp_info, BorderLayout.CENTER);
 	}
 
+	
+	private void initScript(IBasicObjectCore secteur0) throws FileNotFoundException, ScriptException {
+		ScriptEngineManager manager = new ScriptEngineManager();
+		ScriptEngine engine = manager.getEngineByName("JavaScript");
+		engine.eval(new FileReader(new File(this.getClass().getResource(RES).getPath() + "actionShip.js")));
+		
+		Object o = engine.get("objAction");
+		Invocable invocable = (Invocable) engine;
+		IactionShip objAction = invocable.getInterface(o, IactionShip.class);
+		engine.put("objAction", objAction);
+		objAction.action(secteur0);
+	}
 }

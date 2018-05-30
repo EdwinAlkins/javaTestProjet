@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class BasicObjectCore {
+public class BasicObjectCore implements IBasicObjectCore {
 
 	protected HashMap<String,Object> attributs;
 	protected String name;
@@ -23,14 +23,22 @@ public class BasicObjectCore {
  			this.name = name;
  	}
  	
- 	public Object getValue(String key) {
+ 	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#getValue(java.lang.String)
+	 */
+ 	@Override
+	public Object getValue(String key) {
  		if(this.attributs.containsKey(key))
  			return this.attributs.get(key);
  		else 
  			return null;
  	}
  	
- 	public List<String> getHeader(){
+ 	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#getHeader()
+	 */
+ 	@Override
+	public List<String> getHeader(){
  		List<String> header = new ArrayList<>();
  		for(Entry<String, Object> element:attributs.entrySet()) {
  			header.add(element.getKey());
@@ -38,7 +46,11 @@ public class BasicObjectCore {
  		return header;
  	}
  	
- 	public List<Object> getElements(){
+ 	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#getElements()
+	 */
+ 	@Override
+	public List<Object> getElements(){
  		List<Object> elements = new ArrayList<>();
  		for(Entry<String, Object> element:attributs.entrySet()) {
  			elements.add(element.getValue());
@@ -46,10 +58,18 @@ public class BasicObjectCore {
  		return elements;
  	}
  	
- 	public Object getAt(int index) {
+ 	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#getAt(int)
+	 */
+ 	@Override
+	public Object getAt(int index) {
  		return getElements().get(index);
  	}
 
+	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#setValue(java.lang.String, java.lang.Object)
+	 */
+	@Override
 	public void setValue(String key, Object value) {
 		if(this.attributs.containsKey(key))
 			this.attributs.replace(key, value);
@@ -57,14 +77,25 @@ public class BasicObjectCore {
 			this.attributs.put(key, value);
 	}
 	
- 	public String getName() {
+ 	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#getName()
+	 */
+ 	@Override
+	public String getName() {
 		return name;
 	}
  	
- 	public void setName(String name) {
+ 	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#setName(java.lang.String)
+	 */
+ 	@Override
+	public void setName(String name) {
 		this.name = name;
 	}
 	
+ 	/* (non-Javadoc)
+	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#toString()
+	 */
  	@Override
 	public String toString() {
 		return "("+this.name + "=" + attributs+")";

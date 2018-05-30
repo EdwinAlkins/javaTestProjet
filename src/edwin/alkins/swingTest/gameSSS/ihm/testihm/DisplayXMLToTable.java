@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import javax.swing.SwingWorker;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.ReaderJDOMboc;
 import edwin.alkins.swingTest.gameSSS.ihm.component.TabelModelGenerique;
 import edwin.alkins.swingTest.gameSSS.ihm.component.TableHeaderSorter;
@@ -67,7 +68,7 @@ public class DisplayXMLToTable {
 		SwingWorker sw = new SwingWorker<ArrayList<BasicObjectCore>,BasicObjectCore>() {
 			protected ArrayList<BasicObjectCore> doInBackground() throws Exception {
 				ReaderJDOMboc rboc = new ReaderJDOMboc("bdd_test1.xml");
-				BasicObjectCore save = rboc.getSave();
+				IBasicObjectCore save = rboc.getSave();
 				return (ArrayList<BasicObjectCore>)save.getValue("list_el");
 			}
 			public void done(){

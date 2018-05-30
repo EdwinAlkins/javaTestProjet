@@ -16,10 +16,10 @@ public class BuilderJDOMboc {
 	private Document document;
 	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/saveboc/";
 
-	public BuilderJDOMboc(BasicObjectCore boc) {
+	public BuilderJDOMboc(IBasicObjectCore boc) {
 		this.racine = new Element(boc.getName());
 		Attribute type = new Attribute("type", boc.getClass().getName());
-		Attribute name = new Attribute("name", ((BasicObjectCore) boc).getName());
+		Attribute name = new Attribute("name", ((IBasicObjectCore) boc).getName());
 		racine.setAttribute(type);
 		racine.setAttribute(name);
 		
@@ -29,29 +29,29 @@ public class BuilderJDOMboc {
 		enregistre(this.getClass().getResource(RES).getPath()+boc.getName()+id+".xml");
 	}
 
-	private Element buildDom(BasicObjectCore boc, Element father) {
+	private Element buildDom(IBasicObjectCore boc, Element father) {
 		for (String key : boc.getHeader()) {
 			Element element = new Element(key);
 			Object o = boc.getValue(key);
 			if(o instanceof BasicObjectCore) {
 				Element child = new Element(key);
 				Attribute type = new Attribute("type", o.getClass().getName());
-				Attribute name = new Attribute("name", ((BasicObjectCore) o).getName());
+				Attribute name = new Attribute("name", ((IBasicObjectCore) o).getName());
 				child.setAttribute(type);
 				child.setAttribute(name);
-				element = buildDom((BasicObjectCore) o,child);
+				element = buildDom((IBasicObjectCore) o,child);
 			}
 			else if(o instanceof List) {
 				Attribute type = new Attribute("type", o.getClass().getName());
 				element.setAttribute(type);
 				for(Object ol:(List)o) {
 					if(ol instanceof BasicObjectCore) {
-						Element child = new Element(((BasicObjectCore) ol).getName());
+						Element child = new Element(((IBasicObjectCore) ol).getName());
 						Attribute oltype = new Attribute("type", ol.getClass().getName());
-						Attribute name = new Attribute("name", ((BasicObjectCore) ol).getName());
+						Attribute name = new Attribute("name", ((IBasicObjectCore) ol).getName());
 						child.setAttribute(oltype);
 						child.setAttribute(name);
-						element.addContent(buildDom((BasicObjectCore) ol,child));
+						element.addContent(buildDom((IBasicObjectCore) ol,child));
 					}
 				}
 			}
