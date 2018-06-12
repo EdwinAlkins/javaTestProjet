@@ -3,18 +3,15 @@ package edwin.alkins.swingTest.gameSSS.ihm.testihm;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.plaf.TreeUI;
-
 import java.awt.BorderLayout;
-import java.beans.PropertyVetoException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -22,12 +19,14 @@ import javax.swing.tree.DefaultTreeModel;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
+import edwin.alkins.swingTest.gameSSS.ihm.testihm.CreateStructureBOC.ActionCreateBOC;
 
 public class InternalFrameV1 extends JInternalFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8866621961529789019L;
+	private IBasicObjectCore gameBOC;
 
 	/**
 	 * Create the frame.
@@ -41,9 +40,11 @@ public class InternalFrameV1 extends JInternalFrame {
 		tCellRenderer.setOpenIcon(null);
 		tCellRenderer.setLeafIcon(null);
 		
+		gameBOC = instance();
+		
 		JTree tree = new JTree();
 		tree.setCellRenderer(tCellRenderer);
-		tree.setModel(new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(instance())));
+		tree.setModel(new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(gameBOC)));
 		tree.setShowsRootHandles(true);
 		tree.setRootVisible(false);
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
@@ -55,6 +56,30 @@ public class InternalFrameV1 extends JInternalFrame {
 			}
 		});
 		getContentPane().add(new JScrollPane(tree), BorderLayout.CENTER);
+		
+		JButton bouton = new JButton("Ajouter");
+	    bouton.addActionListener(new ActionListener(){
+	        public void actionPerformed(ActionEvent event) {
+	          if(tree.getLastSelectedPathComponent() != null){
+	        	  CreateStructureBOC createdBoc = new CreateStructureBOC();
+	        	  createdBoc.setVisible(true);
+	        	  createdBoc.setActionCreateBOC(new ActionCreateBOC() {
+					@Override
+					public void create(IBasicObjectCore boc) {
+						 DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+			              ((IBasicObjectCore)parentNode.getUserObject()).setValue(boc.getType(), boc);
+			              tree.setModel(new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(gameBOC)));
+			              tree.revalidate();
+					}
+				});
+	          }
+	          else{
+	            System.out.println("Aucune sélection !");
+	          }
+	        }
+	      });
+	      this.getContentPane().add(bouton, BorderLayout.SOUTH);
+	      this.setVisible(true);
 	}
 
 	private IBasicObjectCore instance() {

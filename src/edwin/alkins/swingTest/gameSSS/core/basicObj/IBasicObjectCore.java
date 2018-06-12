@@ -17,6 +17,10 @@ public interface IBasicObjectCore {
 	String getType();
 
 	void setType(String name);
+	
+	String getName();
+	
+	void setName(String name);
 
 	String toString();
 
