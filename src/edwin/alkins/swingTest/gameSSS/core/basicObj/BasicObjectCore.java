@@ -8,8 +8,10 @@ import java.util.Map.Entry;
 
 public class BasicObjectCore implements IBasicObjectCore {
 
+	private static final String NAME = "name";
 	protected HashMap<String,Object> attributs;
 	protected String type;
+	protected String name;
  
 	public BasicObjectCore() {
 		this.attributs = new HashMap<String,Object>();
@@ -93,16 +95,25 @@ public class BasicObjectCore implements IBasicObjectCore {
 	public void setType(String type) {
 		this.type = type;
 	}
+ 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
  	/* (non-Javadoc)
 	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#toString()
 	 */
  	@Override
 	public String toString() {
-		return this.attributs.get("name")+":["+this.type+"]";
+ 		String str = (this.name==null)?getValue(NAME).toString():this.name;
+		return str+":["+this.type+"]";
 	}
  	
  	public String getRepresentation() {
-		return "("+this.type + "=" + attributs+")";
+		return "("+this.type+ "=" + attributs+")";
 	}
 }
