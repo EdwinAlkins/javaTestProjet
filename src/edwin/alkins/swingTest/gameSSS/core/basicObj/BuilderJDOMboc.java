@@ -18,16 +18,16 @@ public class BuilderJDOMboc {
 	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/saveboc/";
 
 	public BuilderJDOMboc(IBasicObjectCore boc) {
-		this.racine = new Element(boc.getName());
+		this.racine = new Element(boc.getType());
 		Attribute type = new Attribute("type", boc.getClass().getName());
-		Attribute name = new Attribute("name", ((IBasicObjectCore) boc).getName());
+		Attribute name = new Attribute("name", ((IBasicObjectCore) boc).getType());
 		racine.setAttribute(type);
 		racine.setAttribute(name);
 		
 		this.document = new Document(racine);
 		buildDom(boc, racine);
 		id++;
-		enregistre(this.getClass().getResource(RES).getPath()+boc.getName()+id+".xml");
+		enregistre(this.getClass().getResource(RES).getPath()+boc.getType()+id+".xml");
 	}
 
 	private Element buildDom(IBasicObjectCore boc, Element father) {
@@ -37,7 +37,7 @@ public class BuilderJDOMboc {
 			if(o instanceof BasicObjectCore) {
 				Element child = new Element(key);
 				Attribute type = new Attribute("type", o.getClass().getName());
-				Attribute name = new Attribute("name", ((IBasicObjectCore) o).getName());
+				Attribute name = new Attribute("name", ((IBasicObjectCore) o).getType());
 				child.setAttribute(type);
 				child.setAttribute(name);
 				element = buildDom((IBasicObjectCore) o,child);
@@ -47,9 +47,9 @@ public class BuilderJDOMboc {
 				element.setAttribute(type);
 				for(Object ol:(List)o) {
 					if(ol instanceof BasicObjectCore) {
-						Element child = new Element(((IBasicObjectCore) ol).getName());
+						Element child = new Element(((IBasicObjectCore) ol).getType());
 						Attribute oltype = new Attribute("type", ol.getClass().getName());
-						Attribute name = new Attribute("name", ((IBasicObjectCore) ol).getName());
+						Attribute name = new Attribute("name", ((IBasicObjectCore) ol).getType());
 						child.setAttribute(oltype);
 						child.setAttribute(name);
 						element.addContent(buildDom((IBasicObjectCore) ol,child));

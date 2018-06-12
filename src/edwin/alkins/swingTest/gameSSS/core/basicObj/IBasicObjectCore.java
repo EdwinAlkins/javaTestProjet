@@ -14,10 +14,11 @@ public interface IBasicObjectCore {
 
 	void setValue(String key, Object value);
 
-	String getName();
+	String getType();
 
-	void setName(String name);
+	void setType(String name);
 
 	String toString();
 
+	String getRepresentation();
 }

@@ -2,25 +2,26 @@ package edwin.alkins.swingTest.gameSSS.core.basicObj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
 public class BasicObjectCore implements IBasicObjectCore {
 
 	protected HashMap<String,Object> attributs;
-	protected String name;
+	protected String type;
  
 	public BasicObjectCore() {
 		this.attributs = new HashMap<String,Object>();
-		this.name = "defautBOC";
+		this.type = "defautBOC";
 	}
 	
 	public BasicObjectCore(String name) {
  		this.attributs = new HashMap<String,Object>();
  		if(name == null || name.isEmpty())
- 			this.name = "defautBOC";
+ 			this.type = "defautBOC";
  		else
- 			this.name = name;
+ 			this.type = name;
  	}
  	
  	/* (non-Javadoc)
@@ -81,16 +82,16 @@ public class BasicObjectCore implements IBasicObjectCore {
 	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#getName()
 	 */
  	@Override
-	public String getName() {
-		return name;
+	public String getType() {
+		return type;
 	}
  	
  	/* (non-Javadoc)
 	 * @see edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore#setName(java.lang.String)
 	 */
  	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setType(String type) {
+		this.type = type;
 	}
 	
  	/* (non-Javadoc)
@@ -98,6 +99,10 @@ public class BasicObjectCore implements IBasicObjectCore {
 	 */
  	@Override
 	public String toString() {
-		return "("+this.name + "=" + attributs+")";
+		return this.attributs.get("name")+":["+this.type+"]";
+	}
+ 	
+ 	public String getRepresentation() {
+		return "("+this.type + "=" + attributs+")";
 	}
 }
