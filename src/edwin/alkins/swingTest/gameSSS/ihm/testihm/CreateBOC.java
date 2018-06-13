@@ -13,11 +13,13 @@ import javax.swing.border.EmptyBorder;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.Box;
 
-public class CreateStructureBOC extends JDialog implements ActionListener{
+public class CreateBOC extends JDialog implements ActionListener{
 
 	/**
 	 * 
@@ -40,7 +42,7 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateStructureBOC dialog = new CreateStructureBOC();
+			CreateBOC dialog = new CreateBOC();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -51,7 +53,7 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 	/**
 	 * Create the dialog.
 	 */
-	public CreateStructureBOC() {
+	public CreateBOC() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -106,13 +108,9 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 
 	private ArrayList<String> getListType() {
 		ArrayList<String> listType = new ArrayList<>();
-		listType.add(Integer.class.getName());
-		listType.add(Float.class.getName());
-		listType.add(Double.class.getName());
-		listType.add(String.class.getName());
-		listType.add(Long.class.getName());
-		listType.add(ArrayList.class.getName());
-		listType.add(IBasicObjectCore.class.getName());
+		IBasicObjectCore structure = SystemDataCore.getInstance().getStructuredBOC();
+		for(String head:structure.getHeader())
+			listType.add(head);
 		return listType;
 	}
 
@@ -123,13 +121,7 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 				IBasicObjectCore boc = new BasicObjectCore(typeOfBOC.getText());
 				boc.setName(typeOfBOC.getText());
 				for(JPanelSaisie panel:listP) {
-					if(JPanelSaisie.ComponentOfPanel.type.name().equals(IBasicObjectCore.class.getName())) {
-						BasicObjectCore tmp = new BasicObjectCore(typeOfBOC.getText());
-						tmp.setValue(panel.getValue(JPanelSaisie.ComponentOfPanel.element.name()),panel.getValue(JPanelSaisie.ComponentOfPanel.type.name()));
-						tmp.setValue("typeboc",panel.getValue(JPanelSaisie.ComponentOfPanel.typeboc.name()));
-					}
-					else
-						boc.setValue(panel.getValue(JPanelSaisie.ComponentOfPanel.element.name()),panel.getValue(JPanelSaisie.ComponentOfPanel.type.name()));
+					boc.setValue(panel.getValue(JPanelSaisie.ComponentOfPanel.element.name()),panel.getValue(JPanelSaisie.ComponentOfPanel.type.name()));
 				}
 				if(action!=null)
 					action.create(boc);

@@ -109,7 +109,7 @@ public class BasicObjectCore implements IBasicObjectCore {
 	 */
  	@Override
 	public String toString() {
- 		String str = (this.name==null)?getValue(NAME).toString():this.name;
+ 		String str = (this.name==null)?getValue(NAME)+"":this.name;
 		return str+":["+this.type+"]";
 	}
  	
