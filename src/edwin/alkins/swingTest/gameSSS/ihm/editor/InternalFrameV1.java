@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.testihm;
+package edwin.alkins.swingTest.gameSSS.ihm.editor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import javax.swing.tree.DefaultTreeModel;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
-import edwin.alkins.swingTest.gameSSS.ihm.testihm.CreateStructureBOC.ActionCreateBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.editor.CreateStructureBOC.ActionCreateBOC;
 
 public class InternalFrameV1 extends JInternalFrame {
 	/**

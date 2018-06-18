@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.testihm;
+package edwin.alkins.swingTest.gameSSS.ihm.editor;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultTreeModel;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
-import edwin.alkins.swingTest.gameSSS.ihm.testihm.CreateBOC.ActionCreateBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.editor.CreateBOC.ActionCreateBOC;
 
 import java.awt.BorderLayout;
 import javax.swing.JInternalFrame;
@@ -66,7 +66,8 @@ public class WindowsTestV1 {
 		JLayeredPane layeredPane = new JLayeredPane();
 		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
 		
-		SystemDataCore.getInstance().setBOC(instance());
+		SystemDataCore.getInstance().setBOC(instanceData());
+		SystemDataCore.getInstance().setStructuredBOC(instanceStructure());
 
 		InternalFrameV1 internalFrame = new InternalFrameV1(SystemDataCore.getInstance().getStructuredBOC());
 		ActionListener action0 = new ActionListener() {
@@ -125,7 +126,7 @@ public class WindowsTestV1 {
 		internalFrame1.setVisible(true);
 	}
 	
-	private IBasicObjectCore instance() {
+	private IBasicObjectCore instanceData() {
 		IBasicObjectCore arme0 = new BasicObjectCore("arme");
 		arme0.setValue("name", new String("blasteur"));
 		arme0.setValue("atk", new Integer(10));
@@ -169,8 +170,48 @@ public class WindowsTestV1 {
 		List<IBasicObjectCore> listGalaxy0 = new ArrayList<>();
 		listGalaxy0.add(galaxy0);
 		IBasicObjectCore core = new BasicObjectCore("core");
-		core.setValue("name", new String("engine"));
+		core.setName("engine");
 		core.setValue("world", listGalaxy0);
+		return core;
+	}
+	
+	private IBasicObjectCore instanceStructure() {
+		IBasicObjectCore arme = new BasicObjectCore("arme");
+		arme.setName("arme");
+		arme.setValue("name", new String(String.class.getName()));
+		arme.setValue("atk", new String(Integer.class.getName()));
+		arme.setValue("vitesse", new String(Float.class.getName()));
+		
+		IBasicObjectCore vaiseau = new BasicObjectCore("vaiseau");
+		vaiseau.setName("vaiseau");
+		vaiseau.setValue("name", new String(String.class.getName()));
+		vaiseau.setValue("size_stockage", new String(Integer.class.getName()));
+		vaiseau.setValue("list_arme", new String(ArrayList.class.getName()));
+		vaiseau.setValue("list_arme-type", new String("arme"));
+		
+		IBasicObjectCore secteur = new BasicObjectCore("secteur");
+		secteur.setName("secteur");
+		secteur.setValue("name", new String(String.class.getName()));
+		secteur.setValue("id", new String(Integer.class.getName()));
+		secteur.setValue("list_vaiseaux", new String(ArrayList.class.getName()));
+		secteur.setValue("list_vaiseaux-type", new String("vaiseau"));
+		
+		IBasicObjectCore galaxy = new BasicObjectCore("galaxy");
+		galaxy.setName("galaxy");
+		galaxy.setValue("name", new String(String.class.getName()));
+		galaxy.setValue("id",new String(Integer.class.getName()));
+		galaxy.setValue("list_secteur", new String(ArrayList.class.getName()));
+		galaxy.setValue("list_secteur-type", new String("secteur"));
+		
+		List<IBasicObjectCore> listBOCType = new ArrayList<>();
+		listBOCType.add(arme);
+		listBOCType.add(vaiseau);
+		listBOCType.add(secteur);
+		listBOCType.add(galaxy);
+		IBasicObjectCore core = new BasicObjectCore("types");
+		core.setName("types");
+		core.setValue("list_structure", listBOCType);
+		core.setValue("list_structure-type", new String(IBasicObjectCore.class.getName()));
 		return core;
 	}
 }

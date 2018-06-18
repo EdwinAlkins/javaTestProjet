@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.testihm;
+package edwin.alkins.swingTest.gameSSS.ihm.editor;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
