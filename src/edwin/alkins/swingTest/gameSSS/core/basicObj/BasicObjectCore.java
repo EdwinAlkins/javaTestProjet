@@ -15,7 +15,7 @@ public class BasicObjectCore implements IBasicObjectCore {
  
 	public BasicObjectCore() {
 		this.attributs = new HashMap<String,Object>();
-		this.type = "defautBOC";
+		this.type = "java.lang.Object";
 	}
 	
 	public BasicObjectCore(String name) {
@@ -109,8 +109,12 @@ public class BasicObjectCore implements IBasicObjectCore {
 	 */
  	@Override
 	public String toString() {
- 		String str = (this.name==null)?getValue(NAME)+"":this.name;
-		return str+":["+this.type+"]";
+ 		String str = new String();
+ 		if(this.name!=null)
+ 			str = this.name+":["+this.type+"]";
+ 		else
+ 			str = this.type;
+		return str;
 	}
  	
  	public String getRepresentation() {

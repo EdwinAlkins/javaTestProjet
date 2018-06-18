@@ -38,7 +38,7 @@ public class ReaderJDOMboc {
 			if (type.equals(BasicObjectCore.class.getName())) {
 				String name = racine.getAttribute("name").getValue();
 				IBasicObjectCore boc = new BasicObjectCore(name);
-				return next(boc,racine);
+				return nextReaderSave(boc,racine);
 			}
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException
 				| InvocationTargetException | IOException e) {
@@ -46,8 +46,34 @@ public class ReaderJDOMboc {
 		}
 		return new BasicObjectCore();
 	}
+	
+	public IBasicObjectCore getStructure() {
+		IBasicObjectCore strucutredBOC = new BasicObjectCore();
+		strucutredBOC.setName("structure");
+		strucutredBOC.setType(IBasicObjectCore.class.getName());
+		nextReaderStructure(strucutredBOC,racine.getChildren("element"));
+		return strucutredBOC;
+	}
+	
+	private IBasicObjectCore nextReaderStructure(IBasicObjectCore boc, List<Element> listElement){
+		for(Element element:listElement) {
+			BasicObjectCore tmp = new BasicObjectCore(element.getAttributeValue("type"));
+			tmp.setValue("type",element.getAttributeValue("type"));
+			tmp.setValue("sous_type",element.getAttributeValue("sous_type"));
+			boc.setValue(element.getAttributeValue("type"), tmp);
+			for(Element attribut:element.getChildren("attribut")) {
+				BasicObjectCore att = new BasicObjectCore(attribut.getAttributeValue("type")); 
+				att.setValue("name",attribut.getAttributeValue("name"));
+				att.setValue("type",attribut.getAttributeValue("type"));
+				att.setValue("sous_type",attribut.getAttributeValue("sous_type"));
+				att.setValue("defaut",attribut.getAttributeValue("defaut"));
+				tmp.setValue(attribut.getAttributeValue("name"), att);
+			}
+		}
+		return boc;
+	}
 
-	private IBasicObjectCore next(IBasicObjectCore boc, Element el) throws InstantiationException, IllegalAccessException,
+	private IBasicObjectCore nextReaderSave(IBasicObjectCore boc, Element el) throws InstantiationException, IllegalAccessException,
 			ClassNotFoundException, IllegalArgumentException, InvocationTargetException, IOException {
 		List listElement = el.getChildren();
 		Iterator i = listElement.iterator();
@@ -58,7 +84,7 @@ public class ReaderJDOMboc {
 			if (type.equals(BasicObjectCore.class.getName())) {
 				String name = courant.getAttribute("name").getValue();
 				IBasicObjectCore tmpBoc = new BasicObjectCore(name);
-				boc.setValue(courant.getName(),next(tmpBoc,courant));
+				boc.setValue(courant.getName(),nextReaderSave(tmpBoc,courant));
 			}
 			else if(type.equals(ArrayList.class.getName())) {
 				List dataList = new ArrayList<>();
@@ -72,7 +98,7 @@ public class ReaderJDOMboc {
 						String name = array_el.getAttribute("name").getValue();
 						IBasicObjectCore tmpBoc = new BasicObjectCore(name);
 						//boc.setValue(array_el.getName(),next(tmpBoc,array_el));
-						dataList.add(next(tmpBoc,array_el));
+						dataList.add(nextReaderSave(tmpBoc,array_el));
 					}
 					else
 						dataList.add(getObj(array_type,array_param));

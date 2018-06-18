@@ -1,0 +1,57 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<structure>
+	<element type="arme" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
+		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
+		<attribut name="distance" type="java.lang.Integer" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="atk_bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="atk_coque" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="vitesse" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="last_fire" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="update" type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript" sous_type="script" defaut=""/>
+	</element>
+	<element type="vaisseau" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
+		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
+		<attribut name="puissance" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="stockage" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="inventaire" type="mapItem" sous_type="mapItem" defaut=""/>
+		<attribut name="bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="regeneration_bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="coque" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="regeneration_coque" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="poids" type="java.lang.Interger" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="list_arme" type="java.util.ArrayList" sous_type="arme" defaut=""/>
+		<attribut name="action" type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript" sous_type="script" defaut=""/>
+		<attribut name="update" type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript" sous_type="script" defaut=""/>
+	</element>
+	<element type="station" sous_type="vaisseau">
+		<attribut name="usine" type="java.util.ArrayList" sous_type="usine" defaut=""/>
+	</element>
+	<element type="usine" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
+		<attribut name="production" type="java.util.ArrayList" sous_type="item" defaut=""/>
+	</element>
+	<element type="mapItem" sous_type="edwin.alkins.swingTest.gameSSS.core.stockage.IStockage">
+		<attribut name="stock" type="java.util.ArrayList" sous_type="item" defaut=""/>
+	</element>
+	<element type="script" sous_type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript">
+		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
+		<attribut name="path" type="java.io.File" sous_type="java.lang.Object" defaut=""/>
+	</element>
+	<element type="item" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
+		<attribut name="poids" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="nombre" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="construction" type="edwin.alkins.swingTest.gameSSS.core.stockage.IStockage" sous_type="mapItem" defaut=""/>
+		<attribut name="produit" type="edwin.alkins.swingTest.gameSSS.core.stockage.IStockage" sous_type="mapItem" defaut=""/>
+	</element>
+	<element type="secteur" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
+		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
+		<attribut name="id" type="java.lang.Integer" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="list_vaisseaux" type="java.util.ArrayList" sous_type="vaisseau" defaut=""/>
+		<attribut name="list_items" type="java.util.ArrayList" sous_type="item" defaut=""/>
+		<attribut name="list_stations" type="java.util.ArrayList" sous_type="station" defaut=""/>
+	</element>
+	<element type="galaxy" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
+		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
+		<attribut name="id" type="java.lang.Integer" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="list_secteurs" type="java.util.ArrayList" sous_type="secteur" defaut=""/>
+	</element>
+</structure>
