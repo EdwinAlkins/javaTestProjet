@@ -13,7 +13,7 @@
 		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
 		<attribut name="puissance" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
 		<attribut name="stockage" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>
-		<attribut name="inventaire" type="mapItem" sous_type="mapItem" defaut=""/>
+		<attribut name="inventaire" type="edwin.alkins.swingTest.gameSSS.core.stockage.IStockage" sous_type="mapItem" defaut=""/>
 		<attribut name="bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
 		<attribut name="regeneration_bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
 		<attribut name="coque" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
@@ -27,7 +27,7 @@
 		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
 		<attribut name="puissance" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
 		<attribut name="stockage" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>
-		<attribut name="inventaire" type="mapItem" sous_type="mapItem" defaut=""/>
+		<attribut name="inventaire" type="edwin.alkins.swingTest.gameSSS.core.stockage.IStockage" sous_type="mapItem" defaut=""/>
 		<attribut name="bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
 		<attribut name="regeneration_bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
 		<attribut name="coque" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>

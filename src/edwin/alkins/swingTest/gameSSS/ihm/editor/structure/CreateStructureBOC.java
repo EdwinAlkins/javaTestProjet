@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor;
+package edwin.alkins.swingTest.gameSSS.ihm.editor.structure;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -18,34 +18,30 @@ import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
 import edwin.alkins.swingTest.gameSSS.core.scripting.IScript;
 import edwin.alkins.swingTest.gameSSS.core.stockage.IStockage;
+import edwin.alkins.swingTest.gameSSS.ihm.component.dialog.AbstactEditorDialog;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.Box;
 
-public class CreateStructureBOC extends JDialog implements ActionListener{
+public class CreateStructureBOC extends AbstactEditorDialog {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -514857570771442255L;
-	private final JPanel contentPanel = new JPanel();
-	public interface ActionCreateBOC{
-		public void create(IBasicObjectCore boc);
-	}
-	private ActionCreateBOC action = null;
 	private JTextField jft_type;
 	private Box verticalBox_container;
-	public void setActionCreateBOC(ActionCreateBOC action) {
-		this.action = action;
-	}
-	public ArrayList<JPanelSaisieStructure> listP = new ArrayList<>();
-	private JComboBox<Object> jft_sous_type;
+	private JComboBox<Object> jcb_sous_type;
+	private JButton btn_add;
+	protected ArrayList<PanelEditStructure> listP = new ArrayList<>();
 
 	/**
 	 * Create the dialog.
 	 */
 	public CreateStructureBOC() {
+		super();
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -75,15 +71,15 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 						horizontalBox.add(label);
 					}
 					{
-						jft_sous_type = new JComboBox<Object>(getListType().toArray());
-						horizontalBox.add(jft_sous_type);
-						horizontalBox.add(jft_sous_type);
+						jcb_sous_type = new JComboBox<Object>(getListType().toArray());
+						horizontalBox.add(jcb_sous_type);
+						horizontalBox.add(jcb_sous_type);
 					}
 				}
 			}
 		}
 		{
-			JButton btn_add = new JButton("Ajouter element");
+			btn_add = new JButton("Ajouter element");
 			btn_add.setActionCommand("Add");
 			btn_add.addActionListener(this);
 			contentPanel.add(btn_add, BorderLayout.SOUTH);
@@ -108,28 +104,28 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 		}
 	}
 
-	private ArrayList<String> getListType() {
+	protected ArrayList<String> getListType() {
 		ArrayList<String> listType = new ArrayList<>();
 		listType.add(IBasicObjectCore.class.getName());
 		listType.add(IScript.class.getName());
 		listType.add(IStockage.class.getName());
 		return listType;
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "OK":
 				IBasicObjectCore boc = new BasicObjectCore(jft_type.getText());
 				boc.setValue("type", jft_type.getText());
-				boc.setValue("sous_type", jft_sous_type.getSelectedItem().toString());
-				for(JPanelSaisieStructure panel:listP) {
-					BasicObjectCore tmp = new BasicObjectCore(panel.getValue(JPanelSaisieStructure.ComponentOfPanel.name));
-					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.name.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.name));
-					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.type.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.type));
-					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.sous_type.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.sous_type));
-					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.defaut.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.defaut));
-					boc.setValue(panel.getValue(JPanelSaisieStructure.ComponentOfPanel.name), tmp);
+				boc.setValue("sous_type", jcb_sous_type.getSelectedItem().toString());
+				for(PanelEditStructure panel:listP) {
+					BasicObjectCore tmp = new BasicObjectCore(panel.getValue(PanelEditStructure.ComponentOfPanelEditStructure.name.name()));
+					tmp.setValue(PanelEditStructure.ComponentOfPanelEditStructure.name.name(),panel.getValue(PanelEditStructure.ComponentOfPanelEditStructure.name.name()));
+					tmp.setValue(PanelEditStructure.ComponentOfPanelEditStructure.type.name(),panel.getValue(PanelEditStructure.ComponentOfPanelEditStructure.type.name()));
+					tmp.setValue(PanelEditStructure.ComponentOfPanelEditStructure.sous_type.name(),panel.getValue(PanelEditStructure.ComponentOfPanelEditStructure.sous_type.name()));
+					tmp.setValue(PanelEditStructure.ComponentOfPanelEditStructure.defaut.name(),panel.getValue(PanelEditStructure.ComponentOfPanelEditStructure.defaut.name()));
+					boc.setValue(panel.getValue(PanelEditStructure.ComponentOfPanelEditStructure.name.name()), tmp);
 				}
 				if(action!=null)
 					action.create(boc);
@@ -137,7 +133,7 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 			break;
 		case "Add":
 			Box horizontalBox = Box.createHorizontalBox();
-			JPanelSaisieStructure jPanelSaisie = new JPanelSaisieStructure(this);
+			PanelEditStructure jPanelSaisie = new PanelEditStructure();
 			listP.add(jPanelSaisie);
 			horizontalBox.add(jPanelSaisie);
 			verticalBox_container.add(horizontalBox);

@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor;
+package edwin.alkins.swingTest.gameSSS.ihm.component.tree;
 
 import java.util.List;
 

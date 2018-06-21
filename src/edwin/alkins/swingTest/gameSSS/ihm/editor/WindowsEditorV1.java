@@ -2,8 +2,6 @@ package edwin.alkins.swingTest.gameSSS.ihm.editor;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +19,23 @@ import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.ReaderJDOMboc;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
 import edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine;
+import edwin.alkins.swingTest.gameSSS.ihm.component.dialog.AbstactEditorDialog;
+import edwin.alkins.swingTest.gameSSS.ihm.component.tree.BuilderMutableTreeNode;
+import edwin.alkins.swingTest.gameSSS.ihm.editor.listboc.CreateModelBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.editor.listboc.InternalFrameListOfBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.editor.structure.CreateStructureBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.editor.structure.InternalFrameDisplayTreeStructure;
+
+import static edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine.createStringActionCommand;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
 
-public class WindowsTestV1 {
+public class WindowsEditorV1 {
 
 	private JFrame frame;
+	private InternalFrameDisplayTreeStructure internalFrameStructure;
+	private InternalFrameListOfBOC internalFrameBOC;
 
 	/**
 	 * Launch the application.
@@ -42,7 +50,7 @@ public class WindowsTestV1 {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WindowsTestV1 window = new WindowsTestV1();
+					WindowsEditorV1 window = new WindowsEditorV1();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,7 +62,7 @@ public class WindowsTestV1 {
 	/**
 	 * Create the application.
 	 */
-	public WindowsTestV1() {
+	public WindowsEditorV1() {
 		initialize();
 	}
 
@@ -70,18 +78,17 @@ public class WindowsTestV1 {
 		JLayeredPane layeredPane = new JLayeredPane();
 		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
 		
-		SystemDataCore.getInstance().setStructuredBOC(instanceStructure());
-		SystemDataCore.getInstance().setBOC(instanceListData());
 
-		InternalFrameDisplayTreeStructure internalFrame = new InternalFrameDisplayTreeStructure(SystemDataCore.getInstance().getStructuredBOC());
+		internalFrameStructure = new InternalFrameDisplayTreeStructure(SystemDataCore.getInstance().getStructuredBOC());
 		AbstractAction actionAddStructure = new AbstractAction() {
+			private static final long serialVersionUID = -7929774017395285040L;
 			public void actionPerformed(ActionEvent event) {
-				JTree tree = internalFrame.getTree();
+				JTree tree = internalFrameStructure.getTree();
 				if (tree.getLastSelectedPathComponent() != null) {
-					CreateStructureBOC createdBoc = new CreateStructureBOC();
+					AbstactEditorDialog createdBoc = new CreateStructureBOC();
 					createdBoc.pack();
 					createdBoc.setVisible(true);
-					createdBoc.setActionCreateBOC(new CreateStructureBOC.ActionCreateBOC() {
+					createdBoc.setActionCreateBOC(new AbstactEditorDialog.ActionCreateBOC() {
 						public void create(IBasicObjectCore boc) {
 							DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) tree
 									.getLastSelectedPathComponent();
@@ -96,40 +103,42 @@ public class WindowsTestV1 {
 				}
 			}
 		};
-		ActionRedefine.getInstance().setAction(InternalFrameDisplayTreeStructure.class.getName()+"add_strucutre", actionAddStructure);
-		internalFrame.setResizable(true);
-		internalFrame.setBounds(0, 0, 228, 261);
-		layeredPane.add(internalFrame);
-		internalFrame.pack();
-		internalFrame.setVisible(true);
-		
-		InternalFrameListOfBOC internalFrame1 = new InternalFrameListOfBOC(SystemDataCore.getInstance().getBOC());
-		AbstractAction action1 = new AbstractAction() {
+		ActionRedefine.getInstance().setAction(createStringActionCommand(internalFrameStructure.getClass(),"add_strucutre",internalFrameStructure.id), actionAddStructure);
+		AbstractAction actionAddBOC = new AbstractAction() {
+			private static final long serialVersionUID = 272006760717120336L;
 			public void actionPerformed(ActionEvent event) {
-				JTree tree = internalFrame.getTree();
-				if (tree.getLastSelectedPathComponent() != null) {
-					CreateBOC createdBoc = new CreateBOC();
+					AbstactEditorDialog createdBoc = new CreateModelBOC();
+					createdBoc.pack();
 					createdBoc.setVisible(true);
-					createdBoc.setActionCreateBOC(new CreateBOC.ActionCreateBOC() {
+					createdBoc.setActionCreateBOC(new AbstactEditorDialog.ActionCreateBOC() {
 						public void create(IBasicObjectCore boc) {
-							DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) tree
-									.getLastSelectedPathComponent();
-							((IBasicObjectCore) parentNode.getUserObject()).setValue(boc.getType(), boc);
+							JTree tree = internalFrameBOC.getTree();
 							tree.setModel(
 									new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(SystemDataCore.getInstance().getBOC())));
 							tree.revalidate();
 						}
 					});
-				} else {
-					System.out.println("Aucune sélection !");
-				}
 			}
 		};
-		internalFrame1.setResizable(true);
-		internalFrame1.setBounds(0, 0, 228, 261);
-		layeredPane.add(internalFrame1);
-		internalFrame1.pack();
-		internalFrame1.setVisible(true);
+		ActionRedefine.getInstance().setAction(createStringActionCommand(internalFrameStructure.getClass(),"add_boc",internalFrameStructure.id), actionAddBOC);
+		internalFrameStructure.setResizable(true);
+		internalFrameStructure.setBounds(0, 0, 228, 261);
+		layeredPane.add(internalFrameStructure);
+		internalFrameStructure.pack();
+		internalFrameStructure.setVisible(true);
+		
+		internalFrameBOC = new InternalFrameListOfBOC(SystemDataCore.getInstance().getBOC());
+		AbstractAction actionSave = new AbstractAction() {
+			public void actionPerformed(ActionEvent event) {
+				SystemDataCore.getInstance().saveListOfBoc();
+			}
+		};
+		ActionRedefine.getInstance().setAction(createStringActionCommand(internalFrameBOC.getClass(),"save_boc",internalFrameBOC.id), actionSave);
+		internalFrameBOC.setResizable(true);
+		internalFrameBOC.setBounds(0, 0, 228, 261);
+		layeredPane.add(internalFrameBOC);
+		internalFrameBOC.pack();
+		internalFrameBOC.setVisible(true);
 	}
 	
 	private IBasicObjectCore instanceStructure() {

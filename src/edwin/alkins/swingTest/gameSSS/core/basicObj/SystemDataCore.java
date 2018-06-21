@@ -1,5 +1,9 @@
 package edwin.alkins.swingTest.gameSSS.core.basicObj;
 
+import java.io.File;
+
+import edwin.alkins.swingTest.gameSSS.core.save.BackupObject;
+
 public class SystemDataCore {
 
 	private static SystemDataCore instance = null;
@@ -10,10 +14,16 @@ public class SystemDataCore {
 	}
 	private IBasicObjectCore boc;
 	private IBasicObjectCore structureBOC;
+	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/saveboc/";
 	
 	private SystemDataCore() {
-		this.boc = new BasicObjectCore();
-		this.structureBOC = new BasicObjectCore();
+		File fileLoad = new File(this.getClass().getResource(RES).getPath() + "save.objet");
+		if(fileLoad.exists())
+			this.boc = new BackupObject<BasicObjectCore>().load(fileLoad);
+		else
+			this.boc = new BasicObjectCore();
+		ReaderJDOMboc rboc = new ReaderJDOMboc("structure.xml");
+		this.structureBOC = rboc.getStructure();
 	}
 	
 	public void setBOC(IBasicObjectCore boc) {
@@ -28,5 +38,9 @@ public class SystemDataCore {
 	}
 	public IBasicObjectCore getStructuredBOC() {
 		return this.structureBOC;
+	}
+	public void saveListOfBoc() {
+		File fileLoad = new File(this.getClass().getResource(RES).getPath() + "save.objet");
+		new BackupObject<IBasicObjectCore>().save(this.boc, fileLoad);
 	}
 }

@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor;
+package edwin.alkins.swingTest.gameSSS.ihm.editor.listboc;
 
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
@@ -6,8 +6,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+
+import static edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine.createStringActionCommand;
+
 import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -15,6 +17,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine;
+import edwin.alkins.swingTest.gameSSS.ihm.component.tree.BuilderMutableTreeNode;
 
 public class InternalFrameListOfBOC extends JInternalFrame {
 	/**
@@ -23,6 +26,7 @@ public class InternalFrameListOfBOC extends JInternalFrame {
 	private static final long serialVersionUID = -8866621961529789019L;
 	private JTree tree;
 	private JButton btn_modifier;
+	public final int id = ActionRedefine.getInstance().getIdAction();
 
 	/**
 	 * Create the frame.
@@ -51,8 +55,8 @@ public class InternalFrameListOfBOC extends JInternalFrame {
 		});
 		getContentPane().add(new JScrollPane(tree), BorderLayout.CENTER);
 		
-		btn_modifier = new JButton("Modifier");
-		btn_modifier.setActionCommand(this.getClass().getName()+"edit_boc");
+		btn_modifier = new JButton("Sauvgarder");
+		btn_modifier.setActionCommand(createStringActionCommand(this.getClass(),"save_boc",id));
 		btn_modifier.addActionListener(ActionRedefine.getInstance());
 	    this.getContentPane().add(btn_modifier, BorderLayout.SOUTH);
 	    this.setVisible(true);

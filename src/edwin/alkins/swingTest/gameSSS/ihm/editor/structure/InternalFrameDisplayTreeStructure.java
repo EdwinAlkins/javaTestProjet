@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor;
+package edwin.alkins.swingTest.gameSSS.ihm.editor.structure;
 
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
@@ -7,7 +7,6 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -15,6 +14,9 @@ import javax.swing.tree.DefaultTreeModel;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine;
+import edwin.alkins.swingTest.gameSSS.ihm.component.tree.BuilderMutableTreeNode;
+
+import static edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine.createStringActionCommand;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
@@ -27,8 +29,7 @@ public class InternalFrameDisplayTreeStructure extends JInternalFrame {
 	 */
 	private static final long serialVersionUID = -8866621961529789019L;
 	private JTree tree;
-	private JButton btn_newStructure;
-	private JButton btn_createBOC;
+	public final int id = ActionRedefine.getInstance().getIdAction();
 
 	/**
 	 * Create the frame.
@@ -64,16 +65,16 @@ public class InternalFrameDisplayTreeStructure extends JInternalFrame {
 	    Component horizontalGlue_2 = Box.createHorizontalGlue();
 	    panel.add(horizontalGlue_2);
 	    
-	    btn_newStructure = new JButton("Ajouter une Structure");
-	    btn_newStructure.setActionCommand(this.getClass().getName()+"add_strucutre");
+	    JButton btn_newStructure = new JButton("Ajouter une Structure");
+	    btn_newStructure.setActionCommand(createStringActionCommand(this.getClass(),"add_strucutre",id));
 	    panel.add(btn_newStructure);
 	    btn_newStructure.addActionListener(ActionRedefine.getInstance());
 	    
 	    Component horizontalGlue = Box.createHorizontalGlue();
 	    panel.add(horizontalGlue);
 	    
-	    btn_createBOC = new JButton("Cr\u00E9e un nouvelle object");
-	    btn_createBOC.setActionCommand(this.getClass().getName()+"add_boc");
+	    JButton btn_createBOC = new JButton("Cr\u00E9e un nouvelle object");
+	    btn_createBOC.setActionCommand(createStringActionCommand(this.getClass(),"add_boc",id));
 	    panel.add(btn_createBOC);
 	    btn_createBOC.addActionListener(ActionRedefine.getInstance());
 	    

@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor;
+package edwin.alkins.swingTest.gameSSS.ihm.editor.structure;
 
 import javax.swing.JPanel;
 import javax.swing.Box;
@@ -9,25 +9,27 @@ import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
 import edwin.alkins.swingTest.gameSSS.core.scripting.IScript;
 import edwin.alkins.swingTest.gameSSS.core.stockage.IStockage;
+import edwin.alkins.swingTest.gameSSS.ihm.component.panel.AbstactEditorPanel;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Map;
+
 import javax.swing.BoxLayout;
 import java.awt.Component;
 
-public class JPanelSaisieStructure extends JPanel {
+public class PanelEditStructure extends AbstactEditorPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8910744911830804465L;
 	private JTextField jtf_name;
 
-	private EnumMap<ComponentOfPanel,JComponent> mapObj = new EnumMap<ComponentOfPanel,JComponent>(ComponentOfPanel.class);
-	public enum ComponentOfPanel{
+	private Map<ComponentOfPanelEditStructure,JComponent> mapObj = new EnumMap<ComponentOfPanelEditStructure,JComponent>(ComponentOfPanelEditStructure.class);
+	public enum ComponentOfPanelEditStructure{
 		name,
 		type,
 		sous_type,
@@ -37,7 +39,7 @@ public class JPanelSaisieStructure extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public JPanelSaisieStructure(JDialog father) {
+	public PanelEditStructure() {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		Box horizontalBox = Box.createHorizontalBox();
@@ -48,7 +50,7 @@ public class JPanelSaisieStructure extends JPanel {
 		jtf_name = new JTextField();
 		horizontalBox.add(jtf_name);
 		jtf_name.setColumns(10);
-		mapObj.put(ComponentOfPanel.name, jtf_name);
+		mapObj.put(ComponentOfPanelEditStructure.name, jtf_name);
 		
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalBox.add(horizontalStrut);
@@ -59,7 +61,7 @@ public class JPanelSaisieStructure extends JPanel {
 		JComboBox<Object> jcb_type = new JComboBox<Object>(getListType().toArray());
 		horizontalBox.add(jcb_type);
 		add(horizontalBox);
-		mapObj.put(ComponentOfPanel.type, jcb_type);
+		mapObj.put(ComponentOfPanelEditStructure.type, jcb_type);
 		
 		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
 		horizontalBox.add(horizontalStrut_1);
@@ -69,7 +71,7 @@ public class JPanelSaisieStructure extends JPanel {
 		
 		JComboBox<Object> jcb_sous_type = new JComboBox<Object>(getListSousType().toArray());
 		horizontalBox.add(jcb_sous_type);
-		mapObj.put(ComponentOfPanel.sous_type, jcb_sous_type);
+		mapObj.put(ComponentOfPanelEditStructure.sous_type, jcb_sous_type);
 		
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
 		horizontalBox.add(horizontalStrut_2);
@@ -80,7 +82,7 @@ public class JPanelSaisieStructure extends JPanel {
 		JTextField jtf_defaut = new JTextField();
 		jtf_defaut.setColumns(10);
 		horizontalBox.add(jtf_defaut);
-		mapObj.put(ComponentOfPanel.defaut, jtf_defaut);
+		mapObj.put(ComponentOfPanelEditStructure.defaut, jtf_defaut);
 	}
 	
 	private ArrayList<String> getListType() {
@@ -106,10 +108,11 @@ public class JPanelSaisieStructure extends JPanel {
 		return listType;
 	}
 	
-	public String getValue(ComponentOfPanel key) {
+	public String getValue(String key) {
 		String str = new String();
-		if(mapObj.containsKey(key)) {
-			JComponent comp = mapObj.get(key);
+		ComponentOfPanelEditStructure enumKey = ComponentOfPanelEditStructure.valueOf(key);
+		if(mapObj.containsKey(enumKey)) {
+			JComponent comp = mapObj.get(enumKey);
 			if(comp instanceof JTextField)
 				str = ((JTextField)comp).getText();
 			else if(comp instanceof JComboBox<?>)
