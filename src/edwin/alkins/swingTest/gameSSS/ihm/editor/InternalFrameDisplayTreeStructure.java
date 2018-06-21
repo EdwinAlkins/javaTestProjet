@@ -1,8 +1,5 @@
 package edwin.alkins.swingTest.gameSSS.ihm.editor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
@@ -10,30 +7,33 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
-import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
-import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
-import edwin.alkins.swingTest.gameSSS.ihm.editor.CreateStructureBOC.ActionCreateBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine;
 
-public class InternalFrameV1 extends JInternalFrame {
+import javax.swing.JPanel;
+import javax.swing.BoxLayout;
+import java.awt.Component;
+import javax.swing.Box;
+
+public class InternalFrameDisplayTreeStructure extends JInternalFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8866621961529789019L;
 	private JTree tree;
-	private JButton bouton;
+	private JButton btn_newStructure;
+	private JButton btn_createBOC;
 
 	/**
 	 * Create the frame.
 	 */
-	public InternalFrameV1(IBasicObjectCore data) {
+	public InternalFrameDisplayTreeStructure(IBasicObjectCore data) {
 		setBounds(100, 100, 450, 300);
 		setTitle("Tree");
 		
@@ -56,14 +56,30 @@ public class InternalFrameV1 extends JInternalFrame {
 			}
 		});
 		getContentPane().add(new JScrollPane(tree), BorderLayout.CENTER);
-		
-		bouton = new JButton("Ajouter");
-	    this.getContentPane().add(bouton, BorderLayout.SOUTH);
+	    
+	    JPanel panel = new JPanel();
+	    getContentPane().add(panel, BorderLayout.SOUTH);
+	    panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+	    
+	    Component horizontalGlue_2 = Box.createHorizontalGlue();
+	    panel.add(horizontalGlue_2);
+	    
+	    btn_newStructure = new JButton("Ajouter une Structure");
+	    btn_newStructure.setActionCommand(this.getClass().getName()+"add_strucutre");
+	    panel.add(btn_newStructure);
+	    btn_newStructure.addActionListener(ActionRedefine.getInstance());
+	    
+	    Component horizontalGlue = Box.createHorizontalGlue();
+	    panel.add(horizontalGlue);
+	    
+	    btn_createBOC = new JButton("Cr\u00E9e un nouvelle object");
+	    btn_createBOC.setActionCommand(this.getClass().getName()+"add_boc");
+	    panel.add(btn_createBOC);
+	    btn_createBOC.addActionListener(ActionRedefine.getInstance());
+	    
+	    Component horizontalGlue_1 = Box.createHorizontalGlue();
+	    panel.add(horizontalGlue_1);
 	    this.setVisible(true);
-	}
-	
-	public void setActionButton(ActionListener action) {
-		bouton.addActionListener(action);
 	}
 	
 	public JTree getTree() {

@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.component;
+package edwin.alkins.swingTest.gameSSS.ihm.component.table;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

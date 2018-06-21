@@ -23,7 +23,19 @@
 		<attribut name="action" type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript" sous_type="script" defaut=""/>
 		<attribut name="update" type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript" sous_type="script" defaut=""/>
 	</element>
-	<element type="station" sous_type="vaisseau">
+	<element type="station" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
+		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
+		<attribut name="puissance" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="stockage" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="inventaire" type="mapItem" sous_type="mapItem" defaut=""/>
+		<attribut name="bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="regeneration_bouclier" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="coque" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="regeneration_coque" type="java.lang.Double" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="poids" type="java.lang.Interger" sous_type="java.lang.Object" defaut="0"/>
+		<attribut name="list_arme" type="java.util.ArrayList" sous_type="arme" defaut=""/>
+		<attribut name="action" type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript" sous_type="script" defaut=""/>
+		<attribut name="update" type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript" sous_type="script" defaut=""/>
 		<attribut name="usine" type="java.util.ArrayList" sous_type="usine" defaut=""/>
 	</element>
 	<element type="usine" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">

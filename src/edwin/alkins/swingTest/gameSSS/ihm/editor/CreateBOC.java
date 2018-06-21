@@ -35,7 +35,7 @@ public class CreateBOC extends JDialog implements ActionListener{
 	public void setActionCreateBOC(ActionCreateBOC action) {
 		this.action = action;
 	}
-	public ArrayList<JPanelSaisie> listP = new ArrayList<>();
+	public ArrayList<JPanelSaisieStructure> listP = new ArrayList<>();
 
 	/**
 	 * Launch the application.
@@ -120,8 +120,8 @@ public class CreateBOC extends JDialog implements ActionListener{
 		case "OK":
 				IBasicObjectCore boc = new BasicObjectCore(typeOfBOC.getText());
 				boc.setName(typeOfBOC.getText());
-				for(JPanelSaisie panel:listP) {
-					boc.setValue(panel.getValue(JPanelSaisie.ComponentOfPanel.element.name()),panel.getValue(JPanelSaisie.ComponentOfPanel.type.name()));
+				for(JPanelSaisieStructure panel:listP) {
+					boc.setValue(panel.getValue(JPanelSaisieStructure.ComponentOfPanel.name),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.type));
 				}
 				if(action!=null)
 					action.create(boc);
@@ -129,7 +129,7 @@ public class CreateBOC extends JDialog implements ActionListener{
 			break;
 		case "Add":
 			Box horizontalBox = Box.createHorizontalBox();
-			JPanelSaisie jPanelSaisie = new JPanelSaisie(getListType(), this);
+			JPanelSaisieStructure jPanelSaisie = new JPanelSaisieStructure(this);
 			listP.add(jPanelSaisie);
 			horizontalBox.add(jPanelSaisie);
 			verticalBox_container.add(horizontalBox);

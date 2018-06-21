@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JTree;
@@ -19,8 +20,10 @@ import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.ReaderJDOMboc;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
+import edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 
 public class WindowsTestV1 {
 
@@ -60,21 +63,23 @@ public class WindowsTestV1 {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JLayeredPane layeredPane = new JLayeredPane();
 		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
 		
-		SystemDataCore.getInstance().setBOC(instanceData());
 		SystemDataCore.getInstance().setStructuredBOC(instanceStructure());
+		SystemDataCore.getInstance().setBOC(instanceListData());
 
-		InternalFrameV1 internalFrame = new InternalFrameV1(SystemDataCore.getInstance().getStructuredBOC());
-		ActionListener action0 = new ActionListener() {
+		InternalFrameDisplayTreeStructure internalFrame = new InternalFrameDisplayTreeStructure(SystemDataCore.getInstance().getStructuredBOC());
+		AbstractAction actionAddStructure = new AbstractAction() {
 			public void actionPerformed(ActionEvent event) {
 				JTree tree = internalFrame.getTree();
 				if (tree.getLastSelectedPathComponent() != null) {
 					CreateStructureBOC createdBoc = new CreateStructureBOC();
+					createdBoc.pack();
 					createdBoc.setVisible(true);
 					createdBoc.setActionCreateBOC(new CreateStructureBOC.ActionCreateBOC() {
 						public void create(IBasicObjectCore boc) {
@@ -91,14 +96,15 @@ public class WindowsTestV1 {
 				}
 			}
 		};
-		internalFrame.setActionButton(action0);
+		ActionRedefine.getInstance().setAction(InternalFrameDisplayTreeStructure.class.getName()+"add_strucutre", actionAddStructure);
 		internalFrame.setResizable(true);
 		internalFrame.setBounds(0, 0, 228, 261);
 		layeredPane.add(internalFrame);
+		internalFrame.pack();
 		internalFrame.setVisible(true);
 		
-		InternalFrameV1 internalFrame1 = new InternalFrameV1(SystemDataCore.getInstance().getBOC());
-		ActionListener action1 = new ActionListener() {
+		InternalFrameListOfBOC internalFrame1 = new InternalFrameListOfBOC(SystemDataCore.getInstance().getBOC());
+		AbstractAction action1 = new AbstractAction() {
 			public void actionPerformed(ActionEvent event) {
 				JTree tree = internalFrame.getTree();
 				if (tree.getLastSelectedPathComponent() != null) {
@@ -119,10 +125,10 @@ public class WindowsTestV1 {
 				}
 			}
 		};
-		internalFrame1.setActionButton(action1);
 		internalFrame1.setResizable(true);
 		internalFrame1.setBounds(0, 0, 228, 261);
 		layeredPane.add(internalFrame1);
+		internalFrame1.pack();
 		internalFrame1.setVisible(true);
 	}
 	
@@ -177,6 +183,18 @@ public class WindowsTestV1 {
 		IBasicObjectCore core = new BasicObjectCore("core");
 		core.setName("engine");
 		core.setValue("world", listGalaxy0);
+		return core;
+	}
+	
+	private IBasicObjectCore instanceListData() {
+		ArrayList<IBasicObjectCore> listType = new ArrayList<>();
+		for(String head:SystemDataCore.getInstance().getStructuredBOC().getHeader()) {
+			BasicObjectCore tmpBoc = new BasicObjectCore(head);
+			tmpBoc.setValue("listOfElements", new ArrayList<>());
+			listType.add(tmpBoc);
+		}
+		IBasicObjectCore core = new BasicObjectCore("core");
+		core.setValue("listOfType", listType);
 		return core;
 	}
 }

@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.component;
+package edwin.alkins.swingTest.gameSSS.ihm.component.table;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

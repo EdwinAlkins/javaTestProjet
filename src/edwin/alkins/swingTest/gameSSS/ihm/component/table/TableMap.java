@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.component;
+package edwin.alkins.swingTest.gameSSS.ihm.component.table;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;

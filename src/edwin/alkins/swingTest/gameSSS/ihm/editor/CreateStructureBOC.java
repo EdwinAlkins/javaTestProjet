@@ -4,15 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.instrument.ClassDefinition;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
+import edwin.alkins.swingTest.gameSSS.core.scripting.IScript;
+import edwin.alkins.swingTest.gameSSS.core.stockage.IStockage;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.Box;
@@ -28,25 +34,13 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 		public void create(IBasicObjectCore boc);
 	}
 	private ActionCreateBOC action = null;
-	private JTextField typeOfBOC;
+	private JTextField jft_type;
 	private Box verticalBox_container;
 	public void setActionCreateBOC(ActionCreateBOC action) {
 		this.action = action;
 	}
-	public ArrayList<JPanelSaisie> listP = new ArrayList<>();
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			CreateStructureBOC dialog = new CreateStructureBOC();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public ArrayList<JPanelSaisieStructure> listP = new ArrayList<>();
+	private JComboBox<Object> jft_sous_type;
 
 	/**
 	 * Create the dialog.
@@ -67,13 +61,23 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 					Box horizontalBox = Box.createHorizontalBox();
 					verticalBox_container.add(horizontalBox);
 					{
-						JLabel label = new JLabel("type : ");
+						JLabel label = new JLabel("Type : ");
 						horizontalBox.add(label);
 					}
 					{
-						typeOfBOC = new JTextField();
-						typeOfBOC.setColumns(15);
-						horizontalBox.add(typeOfBOC);
+						jft_type = new JTextField();
+						jft_type.setColumns(15);
+						horizontalBox.add(jft_type);
+					}
+					
+					{
+						JLabel label = new JLabel("Sous_type : ");
+						horizontalBox.add(label);
+					}
+					{
+						jft_sous_type = new JComboBox<Object>(getListType().toArray());
+						horizontalBox.add(jft_sous_type);
+						horizontalBox.add(jft_sous_type);
 					}
 				}
 			}
@@ -106,13 +110,9 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 
 	private ArrayList<String> getListType() {
 		ArrayList<String> listType = new ArrayList<>();
-		listType.add(Integer.class.getName());
-		listType.add(Float.class.getName());
-		listType.add(Double.class.getName());
-		listType.add(String.class.getName());
-		listType.add(Long.class.getName());
-		listType.add(ArrayList.class.getName());
 		listType.add(IBasicObjectCore.class.getName());
+		listType.add(IScript.class.getName());
+		listType.add(IStockage.class.getName());
 		return listType;
 	}
 
@@ -120,16 +120,16 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "OK":
-				IBasicObjectCore boc = new BasicObjectCore(typeOfBOC.getText());
-				boc.setName(typeOfBOC.getText());
-				for(JPanelSaisie panel:listP) {
-					if(JPanelSaisie.ComponentOfPanel.type.name().equals(IBasicObjectCore.class.getName())) {
-						BasicObjectCore tmp = new BasicObjectCore(typeOfBOC.getText());
-						tmp.setValue(panel.getValue(JPanelSaisie.ComponentOfPanel.element.name()),panel.getValue(JPanelSaisie.ComponentOfPanel.type.name()));
-						tmp.setValue("typeboc",panel.getValue(JPanelSaisie.ComponentOfPanel.typeboc.name()));
-					}
-					else
-						boc.setValue(panel.getValue(JPanelSaisie.ComponentOfPanel.element.name()),panel.getValue(JPanelSaisie.ComponentOfPanel.type.name()));
+				IBasicObjectCore boc = new BasicObjectCore(jft_type.getText());
+				boc.setValue("type", jft_type.getText());
+				boc.setValue("sous_type", jft_sous_type.getSelectedItem().toString());
+				for(JPanelSaisieStructure panel:listP) {
+					BasicObjectCore tmp = new BasicObjectCore(panel.getValue(JPanelSaisieStructure.ComponentOfPanel.name));
+					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.name.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.name));
+					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.type.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.type));
+					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.sous_type.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.sous_type));
+					tmp.setValue(JPanelSaisieStructure.ComponentOfPanel.defaut.name(),panel.getValue(JPanelSaisieStructure.ComponentOfPanel.defaut));
+					boc.setValue(panel.getValue(JPanelSaisieStructure.ComponentOfPanel.name), tmp);
 				}
 				if(action!=null)
 					action.create(boc);
@@ -137,7 +137,7 @@ public class CreateStructureBOC extends JDialog implements ActionListener{
 			break;
 		case "Add":
 			Box horizontalBox = Box.createHorizontalBox();
-			JPanelSaisie jPanelSaisie = new JPanelSaisie(getListType(), this);
+			JPanelSaisieStructure jPanelSaisie = new JPanelSaisieStructure(this);
 			listP.add(jPanelSaisie);
 			horizontalBox.add(jPanelSaisie);
 			verticalBox_container.add(horizontalBox);

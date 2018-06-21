@@ -1,14 +1,17 @@
 package edwin.alkins.swingTest.gameSSS.core.basicObj;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class BasicObjectCore implements IBasicObjectCore {
+public class BasicObjectCore implements IBasicObjectCore, Serializable{
 
-	private static final String NAME = "name";
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6943685216297941153L;
 	protected HashMap<String,Object> attributs;
 	protected String type;
 	protected String name;

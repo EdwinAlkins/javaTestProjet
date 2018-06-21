@@ -12,9 +12,9 @@ import javax.swing.SwingWorker;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.ReaderJDOMboc;
-import edwin.alkins.swingTest.gameSSS.ihm.component.TabelModelGenerique;
-import edwin.alkins.swingTest.gameSSS.ihm.component.TableHeaderSorter;
-import edwin.alkins.swingTest.gameSSS.ihm.component.TableSorter;
+import edwin.alkins.swingTest.gameSSS.ihm.component.table.TabelModelGenerique;
+import edwin.alkins.swingTest.gameSSS.ihm.component.table.TableHeaderSorter;
+import edwin.alkins.swingTest.gameSSS.ihm.component.table.TableSorter;
 
 import java.awt.BorderLayout;
 

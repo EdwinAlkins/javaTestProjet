@@ -62,7 +62,7 @@ public class ReaderJDOMboc {
 			tmp.setValue("sous_type",element.getAttributeValue("sous_type"));
 			boc.setValue(element.getAttributeValue("type"), tmp);
 			for(Element attribut:element.getChildren("attribut")) {
-				BasicObjectCore att = new BasicObjectCore(attribut.getAttributeValue("type")); 
+				BasicObjectCore att = new BasicObjectCore(attribut.getAttributeValue("name")); 
 				att.setValue("name",attribut.getAttributeValue("name"));
 				att.setValue("type",attribut.getAttributeValue("type"));
 				att.setValue("sous_type",attribut.getAttributeValue("sous_type"));
