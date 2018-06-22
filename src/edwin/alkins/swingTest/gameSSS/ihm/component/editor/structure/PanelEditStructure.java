@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor.structure;
+package edwin.alkins.swingTest.gameSSS.ihm.component.editor.structure;
 
 import javax.swing.JPanel;
 import javax.swing.Box;

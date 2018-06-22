@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor.listboc;
+package edwin.alkins.swingTest.gameSSS.ihm.component.editor.listboc;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,14 +73,14 @@ public class PanelEditBoc extends AbstactEditorPanel {
 				yLabelGroup.addComponent(lbl_edite);
 				
 				JComponent jtf_edite = null;
-				if(getListType().contains(value.getValue("type"))) {
+				if(getListType().contains(value.getValue("type")) && value.getValue("sous_type").equals(Object.class.getName())) {
 					jtf_edite = new JTextField();
 					((JTextField)jtf_edite).setColumns(10);
 				}
 				else if(value.getValue("type").equals(ArrayList.class.getName())) {
 					jtf_edite = new JLabel("réféchire pour la liste");
 				}
-				else if(value.getValue("type").equals(File.class.getName())) {
+				else if(value.getValue("sous_type").equals(File.class.getName())) {
 					jtf_edite = new JButton(System.getProperty("user.dir"));
 					JButton btn_tmp = ((JButton)jtf_edite);
 					btn_tmp.addActionListener(new ActionListener() {
@@ -143,8 +143,24 @@ public class PanelEditBoc extends AbstactEditorPanel {
 				str = ((JTextField) comp).getText();
 			else if(comp instanceof JComboBox<?>)
 				str = ((JComboBox<?>) comp).getSelectedItem().toString();
+			else if(comp instanceof JButton)
+				str = ((JButton) comp).getText();
 		}
 		return str;
+	}
+
+	public void setData(IBasicObjectCore boc) {
+		for(String head:boc.getHeader()) {
+			if(mapObj.containsKey(head)) {
+				JComponent comp = mapObj.get(head);
+				if(comp instanceof JTextField)
+					((JTextField) comp).setText(boc.getValue(head).toString());
+				else if(comp instanceof JComboBox<?>)
+					((JComboBox<?>) comp).setSelectedItem(boc.getValue(head).toString());
+				else if(comp instanceof JButton)
+					((JButton) comp).setText(boc.getValue(head).toString());
+			}
+		}
 	}
 
 }

@@ -25,4 +25,6 @@ public interface IBasicObjectCore {
 	String toString();
 
 	String getRepresentation();
+	
+	void deleteValue(String key);
 }

@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor;
+package edwin.alkins.swingTest.gameSSS.ihm.component.editor;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -13,6 +13,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
@@ -20,22 +21,25 @@ import edwin.alkins.swingTest.gameSSS.core.basicObj.ReaderJDOMboc;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
 import edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine;
 import edwin.alkins.swingTest.gameSSS.ihm.component.dialog.AbstactEditorDialog;
+import edwin.alkins.swingTest.gameSSS.ihm.component.editor.listboc.CreateModelBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.component.editor.listboc.InternalFrameListOfBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.component.editor.structure.CreateStructureBOC;
+import edwin.alkins.swingTest.gameSSS.ihm.component.editor.structure.InternalFrameDisplayTreeStructure;
+import edwin.alkins.swingTest.gameSSS.ihm.component.logshell.InternalFrameLogShell;
 import edwin.alkins.swingTest.gameSSS.ihm.component.tree.BuilderMutableTreeNode;
-import edwin.alkins.swingTest.gameSSS.ihm.editor.listboc.CreateModelBOC;
-import edwin.alkins.swingTest.gameSSS.ihm.editor.listboc.InternalFrameListOfBOC;
-import edwin.alkins.swingTest.gameSSS.ihm.editor.structure.CreateStructureBOC;
-import edwin.alkins.swingTest.gameSSS.ihm.editor.structure.InternalFrameDisplayTreeStructure;
 
 import static edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine.createStringActionCommand;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
+import java.awt.Component;
 
 public class WindowsEditorV1 {
 
 	private JFrame frame;
 	private InternalFrameDisplayTreeStructure internalFrameStructure;
 	private InternalFrameListOfBOC internalFrameBOC;
+	private InternalFrameLogShell internalFrameLog;
 
 	/**
 	 * Launch the application.
@@ -78,7 +82,6 @@ public class WindowsEditorV1 {
 		JLayeredPane layeredPane = new JLayeredPane();
 		frame.getContentPane().add(layeredPane, BorderLayout.CENTER);
 		
-
 		internalFrameStructure = new InternalFrameDisplayTreeStructure(SystemDataCore.getInstance().getStructuredBOC());
 		AbstractAction actionAddStructure = new AbstractAction() {
 			private static final long serialVersionUID = -7929774017395285040L;
@@ -93,13 +96,11 @@ public class WindowsEditorV1 {
 							DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) tree
 									.getLastSelectedPathComponent();
 							((IBasicObjectCore) parentNode.getUserObject()).setValue(boc.getType(), boc);
-							tree.setModel(
-									new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(SystemDataCore.getInstance().getStructuredBOC())));
-							tree.revalidate();
+							createdBoc.update(internalFrameStructure.getTree());
 						}
 					});
 				} else {
-					System.out.println("Aucune sélection !");
+					SystemDataCore.getInstance().getLoggeurShell().printLog("Aucune sélection !", "red");
 				}
 			}
 		};
@@ -112,17 +113,20 @@ public class WindowsEditorV1 {
 					createdBoc.setVisible(true);
 					createdBoc.setActionCreateBOC(new AbstactEditorDialog.ActionCreateBOC() {
 						public void create(IBasicObjectCore boc) {
-							JTree tree = internalFrameBOC.getTree();
-							tree.setModel(
-									new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(SystemDataCore.getInstance().getBOC())));
-							tree.revalidate();
+							ArrayList<IBasicObjectCore> structureBoc = (ArrayList<IBasicObjectCore>) SystemDataCore.getInstance().getBOC().getValue("listOfType");
+							for(IBasicObjectCore currentType:structureBoc) {
+								if(currentType.getType().equals(boc.getType())) {
+									((ArrayList<IBasicObjectCore>)currentType.getValue("listOfElements")).add(boc);
+								}
+							}
+							createdBoc.update(internalFrameBOC.getTree());
 						}
 					});
 			}
 		};
 		ActionRedefine.getInstance().setAction(createStringActionCommand(internalFrameStructure.getClass(),"add_boc",internalFrameStructure.id), actionAddBOC);
 		internalFrameStructure.setResizable(true);
-		internalFrameStructure.setBounds(0, 0, 228, 261);
+		internalFrameStructure.setBounds(322, 0, 228, 261);
 		layeredPane.add(internalFrameStructure);
 		internalFrameStructure.pack();
 		internalFrameStructure.setVisible(true);
@@ -134,16 +138,70 @@ public class WindowsEditorV1 {
 			}
 		};
 		ActionRedefine.getInstance().setAction(createStringActionCommand(internalFrameBOC.getClass(),"save_boc",internalFrameBOC.id), actionSave);
+		AbstractAction actionEdit = new AbstractAction() {
+			public void actionPerformed(ActionEvent event) {
+				JTree tree = internalFrameBOC.getTree();
+				if (tree.getLastSelectedPathComponent() != null) {
+					CreateModelBOC createdBoc = new CreateModelBOC();
+					DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) tree
+							.getLastSelectedPathComponent();
+					createdBoc.setData((IBasicObjectCore) parentNode.getUserObject());
+					createdBoc.pack();
+					createdBoc.setVisible(true);
+					createdBoc.setActionCreateBOC(new AbstactEditorDialog.ActionCreateBOC() {
+						public void create(IBasicObjectCore boc) {
+							DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) tree
+									.getLastSelectedPathComponent();
+							IBasicObjectCore tmp = ((IBasicObjectCore) parentNode.getUserObject());
+							tmp.setName(boc.getName());
+							for(String head:boc.getHeader()) {
+								tmp.setValue(head, boc.getValue(head));
+							}
+							createdBoc.update(internalFrameBOC.getTree());
+						}
+					});
+				} else {
+					SystemDataCore.getInstance().getLoggeurShell().printLog("Aucune sélection !", "red");
+				}
+			}
+		};
+		ActionRedefine.getInstance().setAction(createStringActionCommand(internalFrameBOC.getClass(),"edit_boc",internalFrameBOC.id), actionEdit);
+		AbstractAction actionDelete = new AbstractAction() {
+			public void actionPerformed(ActionEvent event) {
+				JTree tree = internalFrameBOC.getTree();
+				if (tree.getLastSelectedPathComponent() != null) {
+					DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode) tree
+							.getLastSelectedPathComponent();
+					IBasicObjectCore selectTmp = (IBasicObjectCore) selectNode.getUserObject();
+					DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) ((DefaultMutableTreeNode) tree
+							.getLastSelectedPathComponent()).getParent();
+					ArrayList<IBasicObjectCore> listTmp = (ArrayList<IBasicObjectCore>) ((IBasicObjectCore) parentNode.getUserObject()).getValue("listOfElements");
+					listTmp.remove(selectTmp);
+					tree.setModel(
+							new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(SystemDataCore.getInstance().getBOC())));
+					tree.revalidate();
+				} else {
+					SystemDataCore.getInstance().getLoggeurShell().printLog("Aucune sélection !", "red");
+				}
+			}
+		};
+		ActionRedefine.getInstance().setAction(createStringActionCommand(internalFrameBOC.getClass(),"delete_boc",internalFrameBOC.id), actionDelete);
 		internalFrameBOC.setResizable(true);
-		internalFrameBOC.setBounds(0, 0, 228, 261);
+		internalFrameBOC.setBounds(79, 11, 228, 261);
 		layeredPane.add(internalFrameBOC);
 		internalFrameBOC.pack();
 		internalFrameBOC.setVisible(true);
-	}
-	
-	private IBasicObjectCore instanceStructure() {
-		ReaderJDOMboc rboc = new ReaderJDOMboc("structure.xml");
-		return rboc.getStructure();
+		
+		internalFrameLog = new InternalFrameLogShell();
+		internalFrameLog.setAlignmentX(Component.LEFT_ALIGNMENT);
+		internalFrameLog.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		internalFrameLog.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		internalFrameLog.setAutoscrolls(true);
+		internalFrameLog.setResizable(true);
+		internalFrameLog.setBounds(10, 169, 374, 81);
+		layeredPane.add(internalFrameLog);
+		internalFrameLog.setVisible(true);
+		SystemDataCore.getInstance().setLoggeurShell(internalFrameLog);
 	}
 
 	private IBasicObjectCore instanceData() {
@@ -192,18 +250,6 @@ public class WindowsEditorV1 {
 		IBasicObjectCore core = new BasicObjectCore("core");
 		core.setName("engine");
 		core.setValue("world", listGalaxy0);
-		return core;
-	}
-	
-	private IBasicObjectCore instanceListData() {
-		ArrayList<IBasicObjectCore> listType = new ArrayList<>();
-		for(String head:SystemDataCore.getInstance().getStructuredBOC().getHeader()) {
-			BasicObjectCore tmpBoc = new BasicObjectCore(head);
-			tmpBoc.setValue("listOfElements", new ArrayList<>());
-			listType.add(tmpBoc);
-		}
-		IBasicObjectCore core = new BasicObjectCore("core");
-		core.setValue("listOfType", listType);
 		return core;
 	}
 }

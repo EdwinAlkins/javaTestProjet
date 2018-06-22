@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor.structure;
+package edwin.alkins.swingTest.gameSSS.ihm.component.editor.structure;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.tree.DefaultTreeModel;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
@@ -19,9 +20,11 @@ import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
 import edwin.alkins.swingTest.gameSSS.core.scripting.IScript;
 import edwin.alkins.swingTest.gameSSS.core.stockage.IStockage;
 import edwin.alkins.swingTest.gameSSS.ihm.component.dialog.AbstactEditorDialog;
+import edwin.alkins.swingTest.gameSSS.ihm.component.tree.BuilderMutableTreeNode;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.Box;
 
 public class CreateStructureBOC extends AbstactEditorDialog {
@@ -144,5 +147,12 @@ public class CreateStructureBOC extends AbstactEditorDialog {
 			this.dispose();
 			break;
 		}
+	}
+
+	@Override
+	public void update(JTree tree) {
+		tree.setModel(
+				new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(SystemDataCore.getInstance().getStructuredBOC())));
+		tree.revalidate();
 	}
 }

@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor.listboc;
+package edwin.alkins.swingTest.gameSSS.ihm.component.editor.listboc;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -9,14 +9,21 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.tree.DefaultTreeModel;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.BasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
 import edwin.alkins.swingTest.gameSSS.ihm.component.dialog.AbstactEditorDialog;
-import edwin.alkins.swingTest.gameSSS.ihm.editor.structure.PanelEditStructure;
+import edwin.alkins.swingTest.gameSSS.ihm.component.editor.structure.PanelEditStructure;
+import edwin.alkins.swingTest.gameSSS.ihm.component.tree.BuilderMutableTreeNode;
+
 import javax.swing.JLabel;
 import javax.swing.Box;
+import javax.swing.JTextField;
+import javax.swing.JTree;
+
+import java.awt.Component;
 
 public class CreateModelBOC extends AbstactEditorDialog {
 
@@ -27,6 +34,7 @@ public class CreateModelBOC extends AbstactEditorDialog {
 	private JComboBox<Object> jcb_type;
 	private Box verticalBox_container;
 	protected ArrayList<PanelEditBoc> listP = new ArrayList<>();
+	private JTextField jft_designation;
 
 	/**
 	 * Create the dialog.
@@ -53,6 +61,19 @@ public class CreateModelBOC extends AbstactEditorDialog {
 					{
 						jcb_type = new JComboBox<Object>(getListType().toArray());
 						horizontalBox.add(jcb_type);
+					}
+					{
+						Component horizontalStrut = Box.createHorizontalStrut(20);
+						horizontalBox.add(horizontalStrut);
+					}
+					{
+						JLabel lbl_designation = new JLabel("designation");
+						horizontalBox.add(lbl_designation);
+					}
+					{
+						jft_designation = new JTextField();
+						horizontalBox.add(jft_designation);
+						jft_designation.setColumns(10);
 					}
 				}
 			}
@@ -82,6 +103,20 @@ public class CreateModelBOC extends AbstactEditorDialog {
 			}
 		}
 	}
+	
+	public void setData(IBasicObjectCore boc) {
+		jcb_type.setSelectedItem(boc.getType());
+		jft_designation.setText(boc.getName());
+		Box horizontalBox = Box.createHorizontalBox();
+		jcb_type.setEnabled(false);
+		PanelEditBoc jPanelSaisie = new PanelEditBoc(jcb_type.getSelectedItem().toString(), this);
+		jPanelSaisie.setData(boc);
+		listP.add(jPanelSaisie);
+		horizontalBox.add(jPanelSaisie);
+		verticalBox_container.add(horizontalBox);
+		this.revalidate();
+		this.pack();
+	}
 
 	protected ArrayList<String> getListType() {
 		ArrayList<String> listType = new ArrayList<>();
@@ -96,17 +131,10 @@ public class CreateModelBOC extends AbstactEditorDialog {
 		switch (e.getActionCommand()) {
 		case "OK":
 				IBasicObjectCore boc = new BasicObjectCore(jcb_type.getSelectedItem().toString());
+				boc.setName(jft_designation.getText());
 				for(PanelEditBoc panel:listP) {
 					for(JComponent comp:panel.getListOfElement()) {
 						boc.setValue(comp.getName(), panel.getValue(comp.getName()));
-						if(comp.getName().equals("name"))
-							boc.setName(panel.getValue(comp.getName()).toString());
-					}
-				}
-				ArrayList<IBasicObjectCore> structureBoc = (ArrayList<IBasicObjectCore>) SystemDataCore.getInstance().getBOC().getValue("listOfType");
-				for(IBasicObjectCore currentType:structureBoc) {
-					if(currentType.getType().equals(jcb_type.getSelectedItem().toString())) {
-						((ArrayList<IBasicObjectCore>)currentType.getValue("listOfElements")).add(boc);
 					}
 				}
 				if(action!=null)
@@ -127,5 +155,12 @@ public class CreateModelBOC extends AbstactEditorDialog {
 			this.dispose();
 			break;
 		}
+	}
+
+	@Override
+	public void update(JTree tree) {
+		tree.setModel(
+				new DefaultTreeModel(new BuilderMutableTreeNode("root").addAutoBuildTree(SystemDataCore.getInstance().getBOC())));
+		tree.revalidate();
 	}
 }

@@ -46,7 +46,7 @@
 	</element>
 	<element type="script" sous_type="edwin.alkins.swingTest.gameSSS.core.scripting.IScript">
 		<attribut name="name" type="java.lang.String" sous_type="java.lang.Object" defaut=""/>
-		<attribut name="path" type="java.io.File" sous_type="java.lang.Object" defaut=""/>
+		<attribut name="path" type="java.lang.String" sous_type="java.io.File" defaut=""/>
 	</element>
 	<element type="item" sous_type="edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore">
 		<attribut name="poids" type="java.lang.Long" sous_type="java.lang.Object" defaut="0"/>

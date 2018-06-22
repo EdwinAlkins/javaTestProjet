@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTree;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
 
@@ -24,4 +25,5 @@ public abstract class AbstactEditorDialog extends JDialog implements ActionListe
 		this.action = action;
 	}
 	protected abstract ArrayList<String> getListType();
+	public abstract void update(JTree tree);
 }

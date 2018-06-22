@@ -21,6 +21,7 @@ public class BackupObject<T> {
 		} catch (IOException exception) {
 			System.out.println("Erreur lors de l'écriture : " + exception.getMessage());
 		}
+		f.delete();
 		return null;
 	}
 	

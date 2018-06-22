@@ -1,4 +1,7 @@
-package edwin.alkins.swingTest.gameSSS.core.basicObj;
+package edwin.alkins.swingTest.gameSSS.core.scripting;
+
+import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.IactionShip;
 
 public class ActionShip implements IactionShip {
 

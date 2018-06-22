@@ -1,4 +1,4 @@
-package edwin.alkins.swingTest.gameSSS.ihm.editor.structure;
+package edwin.alkins.swingTest.gameSSS.ihm.component.editor.structure;
 
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
 import edwin.alkins.swingTest.gameSSS.core.basicObj.IBasicObjectCore;
+import edwin.alkins.swingTest.gameSSS.core.basicObj.SystemDataCore;
 import edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine;
 import edwin.alkins.swingTest.gameSSS.ihm.component.tree.BuilderMutableTreeNode;
 
@@ -52,7 +53,7 @@ public class InternalFrameDisplayTreeStructure extends JInternalFrame {
 			public void valueChanged(TreeSelectionEvent event) {
 				if (tree.getLastSelectedPathComponent() != null) {
 					DefaultMutableTreeNode obj = ((DefaultMutableTreeNode)tree.getLastSelectedPathComponent());
-					System.out.println(((IBasicObjectCore)obj.getUserObject()).getRepresentation());
+					SystemDataCore.getInstance().getLoggeurShell().printLog(((IBasicObjectCore)obj.getUserObject()).getRepresentation(), "black");
 				}
 			}
 		});

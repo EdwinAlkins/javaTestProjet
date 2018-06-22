@@ -34,10 +34,7 @@ public class BasicObjectCore implements IBasicObjectCore, Serializable{
 	 */
  	@Override
 	public Object getValue(String key) {
- 		if(this.attributs.containsKey(key))
- 			return this.attributs.get(key);
- 		else 
- 			return null;
+ 		return this.attributs.getOrDefault(key, null);
  	}
  	
  	/* (non-Javadoc)
@@ -81,6 +78,11 @@ public class BasicObjectCore implements IBasicObjectCore, Serializable{
 			this.attributs.replace(key, value);
 		else
 			this.attributs.put(key, value);
+	}
+	
+	public void deleteValue(String key) {
+		if(this.attributs.containsKey(key))
+			this.attributs.remove(key);
 	}
 	
  	/* (non-Javadoc)
