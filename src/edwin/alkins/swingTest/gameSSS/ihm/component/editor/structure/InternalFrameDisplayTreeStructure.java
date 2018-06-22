@@ -22,6 +22,8 @@ import static edwin.alkins.swingTest.gameSSS.ihm.action.ActionRedefine.createStr
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import java.awt.Component;
+import java.awt.Cursor;
+
 import javax.swing.Box;
 
 public class InternalFrameDisplayTreeStructure extends JInternalFrame {

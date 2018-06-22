@@ -16,6 +16,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
+import java.awt.Cursor;
 
 public class InternalFrameLogShell extends JInternalFrame {
 
@@ -37,6 +38,7 @@ public class InternalFrameLogShell extends JInternalFrame {
 
 		JScrollPane srp_log = new JScrollPane();
 		jtp_log = new JTextPane();
+		jtp_log.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		jtp_log.setEditable(false);
 		jtp_log.setContentType("text/html");
 		srp_log.setViewportView(jtp_log);

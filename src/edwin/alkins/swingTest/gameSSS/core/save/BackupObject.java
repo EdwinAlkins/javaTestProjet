@@ -21,13 +21,15 @@ public class BackupObject<T> {
 		} catch (IOException exception) {
 			System.out.println("Erreur lors de l'écriture : " + exception.getMessage());
 		}
-		f.delete();
 		return null;
 	}
 	
 	public boolean save(T obj, File f) {
 		boolean success = false;
 		try {
+			if(!f.exists()) {
+				f.getParentFile().mkdirs();
+			}
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
 			oos.writeObject(obj);
 			oos.close();

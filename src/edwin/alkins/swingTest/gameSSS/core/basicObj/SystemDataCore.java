@@ -18,12 +18,12 @@ public class SystemDataCore {
 	private IBasicObjectCore boc;
 	private IBasicObjectCore structureBOC;
 	private InternalFrameLogShell loggeurShell;
-	private static final String RES = "/edwin/alkins/swingTest/gameSSS/ressources/data/saveboc/";
+	private static final String RES = System.getProperty("user.dir")+"\\data\\";
 	
 	private SystemDataCore() {
 		ReaderJDOMboc rboc = new ReaderJDOMboc("structure.xml");
 		this.structureBOC = rboc.getStructure();
-		File fileLoad = new File(this.getClass().getResource(RES).getPath() + "save.objet");
+		File fileLoad = new File(RES + "save.objet");
 		if(fileLoad.exists())
 			this.boc = new BackupObject<BasicObjectCore>().load(fileLoad);
 		else
@@ -44,7 +44,7 @@ public class SystemDataCore {
 		return this.structureBOC;
 	}
 	public void saveListOfBoc() {
-		File fileLoad = new File(this.getClass().getResource(RES).getPath() + "save.objet");
+		File fileLoad = new File(RES + "save.objet");
 		new BackupObject<IBasicObjectCore>().save(this.boc, fileLoad);
 	}
 	private IBasicObjectCore instanceListData() {

@@ -25,7 +25,7 @@ public class ReaderJDOMboc {
 	public ReaderJDOMboc(String name) {
 		SAXBuilder sxb = new SAXBuilder();
 		try {
-			document = sxb.build(new File(this.getClass().getResource(RES).getPath() + name));
+			document = sxb.build(this.getClass().getResourceAsStream(RES+name));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
