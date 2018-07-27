@@ -1,8 +1,8 @@
 package edwin.alkins.swingTest.littelGame2.core.entity;
 
-import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -12,48 +12,43 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Arc2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Line2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.PolygonFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
 
-public abstract class Entity {
+public abstract class Entity extends JComponent{
 
-	protected Rectangle2D bounds;
 	protected List<Rectangle2DFill> rectangles = new ArrayList<>();
 	protected List<Arc2DFill> arcs = new ArrayList<>();
 	protected List<Line2DFill> lines = new ArrayList<>();
 	protected List<PolygonFill> polygons = new ArrayList<>();
 	protected List<Ellipse2DFill> ellipses = new ArrayList<>();
 	protected double angle = 0d;
-	protected double size = 1d;
+	protected double scale = 1d;
+	private Rectangle2D originalBounds;
 	
 	public Entity(Rectangle2D bounds) {
-		this.bounds = bounds;
+		this.originalBounds = bounds;
+		setBounds(bounds.getBounds());
 	}
 	
 	public abstract void initialize();
-	public void setLocation(Point2D location) {
-		this.bounds = new Rectangle2D.Double(location.getX(), location.getY(), bounds.getWidth(), bounds.getHeight());
-	}
 	public void setAngle(double a) {
 		this.angle = a;
 	}
-	public Point2D getLocation() {
-		return new Point2D.Double(this.bounds.getX(),this.bounds.getY());
-	}
-	public void setSize(double s) {
-		this.size = s;
-	}
-	public Rectangle2D getBounds() {
-		return bounds;
+	public void setScale(double s) {
+		this.scale = s;
+		setBounds(new Rectangle2D.Double(getBounds().getX(), getBounds().getY(),originalBounds.getWidth()*scale,originalBounds.getHeight()*scale).getBounds());
 	}
 	public double getAngle() {
 		return angle;
 	}
-	public double getSize() {
-		return size;
+	public double getScale() {
+		return scale;
 	}
 	public List<Rectangle2DFill> getRectangles() {
         return Collections.unmodifiableList(rectangles);
@@ -71,8 +66,14 @@ public abstract class Entity {
         return Collections.unmodifiableList(ellipses);
     }
 	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		draw((Graphics2D) g);
+	}
+	
 	public Graphics2D getGraphics() {
-		BufferedImage imgEntity = new BufferedImage((int)Math.round(bounds.getWidth()), (int)Math.round(bounds.getHeight()), BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage imgEntity = new BufferedImage((int)Math.round(getBounds().getWidth()), (int)Math.round(getBounds().getHeight()), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = imgEntity.createGraphics();
 		paintEntity(g);
 		g.dispose();
@@ -81,23 +82,18 @@ public abstract class Entity {
 	
 	private void paintEntity(Graphics2D g) {
 		for(Rectangle2DFill rectangle:rectangles) {
-			//g.draw(rectangle);
 			rectangle.draw(g);
 		}
 		for(Arc2DFill arc:arcs) {
-			//g.draw(arc);
 			arc.draw(g);
 		}
 		for(Line2DFill line:lines) {
-			//g.draw(line);
 			line.draw(g);
 		}
 		for(Ellipse2DFill ellipse:ellipses) {
-			//g.draw(ellipse);
 			ellipse.draw(g);
 		}
 		for(PolygonFill polygon:polygons) {
-			//g.drawPolygon(polygon);
 			polygon.draw(g);
 		}
 	};
@@ -111,9 +107,9 @@ public abstract class Entity {
 		gEntity.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 		gEntity.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		AffineTransform at = new AffineTransform();
-		at.translate(bounds.getX(), bounds.getY());
-		at.rotate(Math.toRadians(angle), bounds.getWidth()/2d, bounds.getHeight()/2d);
-		at.scale(size, size);
+		at.translate(getBounds().getX(), getBounds().getY());
+		at.rotate(Math.toRadians(angle), getBounds().getWidth()/2d, getBounds().getHeight()/2d);
+		at.scale(scale, scale);
 		gEntity.setTransform(at);
 		paintEntity(gEntity);
 		gEntity.dispose();
