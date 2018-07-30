@@ -1,6 +1,5 @@
 package edwin.alkins.swingTest.littelGame2.core.entity;
 
-import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
@@ -14,7 +13,7 @@ public class DefaultEntity extends Entity {
 	}
 
 	public void initialize() {
-		//super.ellipses.add(new Ellipse2DFill(0, 0, bounds.getWidth()/2d, bounds.getHeight()/2d));
-		//super.rectangles.add(new Rectangle2DFill(0, 0, bounds.getWidth()/2d, bounds.getHeight()/2d));
+		super.ellipses.add(new Ellipse2DFill(0, 0, originalBounds.getWidth()/2d, originalBounds.getHeight()/2d));
+		super.rectangles.add(new Rectangle2DFill(0, 0, originalBounds.getWidth()/2d, originalBounds.getHeight()/2d));
 	}
 }

@@ -1,9 +1,9 @@
 package edwin.alkins.swingTest.littelGame2.core.entity;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -12,15 +12,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JComponent;
-
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Arc2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Line2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.PolygonFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
 
-public abstract class Entity extends JComponent{
+public abstract class Entity{
 
 	protected List<Rectangle2DFill> rectangles = new ArrayList<>();
 	protected List<Arc2DFill> arcs = new ArrayList<>();
@@ -29,26 +27,36 @@ public abstract class Entity extends JComponent{
 	protected List<Ellipse2DFill> ellipses = new ArrayList<>();
 	protected double angle = 0d;
 	protected double scale = 1d;
-	private Rectangle2D originalBounds;
+	protected Rectangle2D originalBounds;
 	
 	public Entity(Rectangle2D bounds) {
 		this.originalBounds = bounds;
 		setBounds(bounds.getBounds());
 	}
-	
 	public abstract void initialize();
 	public void setAngle(double a) {
 		this.angle = a;
 	}
 	public void setScale(double s) {
 		this.scale = s;
-		setBounds(new Rectangle2D.Double(getBounds().getX(), getBounds().getY(),originalBounds.getWidth()*scale,originalBounds.getHeight()*scale).getBounds());
+	}
+	public void setBounds(Rectangle2D bounds) {
+		this.originalBounds = bounds;
+	}
+	public Rectangle2D getBounds() {
+		return this.originalBounds;
 	}
 	public double getAngle() {
 		return angle;
 	}
 	public double getScale() {
 		return scale;
+	}
+	public Point2D getLocation() {
+		return new Point2D.Double(this.originalBounds.getX(), this.originalBounds.getY());
+	}
+	public void setLocation(Point2D p) {
+		this.originalBounds = new Rectangle2D.Double(p.getX(),p.getY(),this.originalBounds.getWidth(),this.originalBounds.getHeight());
 	}
 	public List<Rectangle2DFill> getRectangles() {
         return Collections.unmodifiableList(rectangles);
@@ -65,13 +73,6 @@ public abstract class Entity extends JComponent{
 	public List<Ellipse2DFill> getEllipses() {
         return Collections.unmodifiableList(ellipses);
     }
-	
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		draw((Graphics2D) g);
-	}
-	
 	public Graphics2D getGraphics() {
 		BufferedImage imgEntity = new BufferedImage((int)Math.round(getBounds().getWidth()), (int)Math.round(getBounds().getHeight()), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = imgEntity.createGraphics();
@@ -113,5 +114,9 @@ public abstract class Entity extends JComponent{
 		gEntity.setTransform(at);
 		paintEntity(gEntity);
 		gEntity.dispose();
+	}
+	
+	public boolean isContaine(Point p) {
+		return this.originalBounds.contains(p);
 	}
 }

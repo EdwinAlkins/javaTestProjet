@@ -5,15 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
 import edwin.alkins.swingTest.littelGame2.ihm.launcher.panel.PanelDisplay;
-
-import java.awt.Canvas;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FrameOfGameV1 extends JFrame {
 	private static final long serialVersionUID = -2008926181773251163L;

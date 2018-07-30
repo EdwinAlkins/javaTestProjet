@@ -12,12 +12,14 @@ import javax.swing.JPanel;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
 
-public class PanelDisplay extends JPanel{
+public class PanelDisplay extends JPanel implements MouseListener{
 
 	private static final long serialVersionUID = -1345297621672577495L;
 	private List<Entity> entities = new ArrayList<Entity>();
 	
 	public PanelDisplay() {
+		this.addMouseListener(this);
+		setLayout(null);
 	}
 	
 	@Override
@@ -29,11 +31,31 @@ public class PanelDisplay extends JPanel{
 	}
 
 	public void setEntity(List<Entity> entities) {
-		invalidate();
-		removeAll();
 		this.entities = entities;
-		for(Entity entity:this.entities)
-			add(entity);
-		revalidate();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		this.entities.stream().forEach(entity -> {if(entity.isContaine(e.getPoint())) System.out.println("lol");});
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
 	}
 }
