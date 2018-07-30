@@ -3,7 +3,6 @@ package edwin.alkins.swingTest.littelGame2.core.entity;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -11,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Arc2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Line2DFill;
@@ -119,4 +117,5 @@ public abstract class Entity{
 	public boolean isContaine(Point p) {
 		return this.originalBounds.contains(p);
 	}
+	public abstract void update();
 }

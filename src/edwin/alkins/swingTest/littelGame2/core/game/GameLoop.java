@@ -1,12 +1,9 @@
 package edwin.alkins.swingTest.littelGame2.core.game;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.SwingUtilities;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
 import edwin.alkins.swingTest.littelGame2.core.entity.RobotEntity;
@@ -45,8 +42,9 @@ public class GameLoop implements Runnable {
 
 		public void update() {
 			entities.stream().forEach(e -> {
-				e.setAngle(e.getAngle()+0.1d);
-				e.setLocation(new Point2D.Double(e.getLocation().getX()+Tools.randome(-0.5d, 0.5d),e.getLocation().getY()+Tools.randome(-0.5d, 0.5d)));
+				e.update();
+				/*e.setAngle(e.getAngle()+0.1d);
+				e.setLocation(new Point2D.Double(e.getLocation().getX()+Tools.randome(-0.5d, 0.5d),e.getLocation().getY()+Tools.randome(-0.5d, 0.5d)));*/
 			});
 			frame.getPanelDisplayArea().setEntity(entities);
 		}

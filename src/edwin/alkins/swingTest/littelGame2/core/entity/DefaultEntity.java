@@ -16,4 +16,8 @@ public class DefaultEntity extends Entity {
 		super.ellipses.add(new Ellipse2DFill(0, 0, originalBounds.getWidth()/2d, originalBounds.getHeight()/2d));
 		super.rectangles.add(new Rectangle2DFill(0, 0, originalBounds.getWidth()/2d, originalBounds.getHeight()/2d));
 	}
+
+	@Override
+	public void update() {
+	}
 }

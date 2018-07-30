@@ -2,7 +2,6 @@ package edwin.alkins.swingTest.littelGame2.core.entity;
 
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
-
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
 import edwin.alkins.swingTest.littelGame2.core.inventory.Inventory;
@@ -28,5 +27,10 @@ public class RobotEntity extends Entity{
 		super.ellipses.add(new Ellipse2DFill(10d, 8d, 4d, 4d).setDrawnBorder(false).setFillColor(Color.green));
 		super.ellipses.add(new Ellipse2DFill(18d, 8d, 4d, 4d).setDrawnBorder(false).setFillColor(Color.green));
 		this.inventory = new Inventory(10);
+	}
+
+	@Override
+	public void update() {
+		
 	}
 }
