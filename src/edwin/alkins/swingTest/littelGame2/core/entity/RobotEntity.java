@@ -6,6 +6,12 @@ import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
 import edwin.alkins.swingTest.littelGame2.core.inventory.Inventory;
 
+/**
+ * ^super..*.add.new.(.*)Fill(.*).setDrawnBorder.*.setFillColor.(Color.*)\)\);.*
+ * g2d.setColor\(\3\);\ng2d.fill\(new \1\.Double\2\);
+ * @author wnauroy
+ *
+ */
 public class RobotEntity extends Entity{
 
 	protected Inventory inventory;
