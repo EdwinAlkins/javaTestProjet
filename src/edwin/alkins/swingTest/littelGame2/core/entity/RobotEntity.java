@@ -9,15 +9,16 @@ import edwin.alkins.swingTest.littelGame2.core.inventory.Inventory;
 /**
  * ^super..*.add.new.(.*)Fill(.*).setDrawnBorder.*.setFillColor.(Color.*)\)\);.*
  * g2d.setColor\(\3\);\ng2d.fill\(new \1\.Double\2\);
+ * 
  * @author wnauroy
  *
  */
-public class RobotEntity extends Entity{
+public class RobotEntity extends Entity {
 
 	protected Inventory inventory;
-	
+
 	public RobotEntity() {
-		super(new Rectangle2D.Double(0,0,32d,26d));
+		super(new Rectangle2D.Double(0, 0, 32d, 26d));
 		initialize();
 	}
 
@@ -29,14 +30,16 @@ public class RobotEntity extends Entity{
 		super.rectangles.add(new Rectangle2DFill(14d, 14d, 4d, 12d).setDrawnBorder(false).setFillColor(Color.red));
 		super.rectangles.add(new Rectangle2DFill(26d, 10d, 6d, 12d).setDrawnBorder(false).setFillColor(Color.red));
 		super.rectangles.add(new Rectangle2DFill(28d, 0d, 2d, 10d).setDrawnBorder(false).setFillColor(Color.black));
-		
+
 		super.ellipses.add(new Ellipse2DFill(10d, 8d, 4d, 4d).setDrawnBorder(false).setFillColor(Color.green));
 		super.ellipses.add(new Ellipse2DFill(18d, 8d, 4d, 4d).setDrawnBorder(false).setFillColor(Color.green));
 		this.inventory = new Inventory(10);
 	}
 
 	@Override
-	public void update() {
-		
+	public void update(long timePass) {
+		this.action.mouveToTarget(getLocationCenter(), 10, timePass);
+		setLocationCenter(this.action.getPoint());
+		setAngle(this.action.getAngle());
 	}
 }

@@ -3,13 +3,18 @@ package edwin.alkins.swingTest.littelGame2.core.entity;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import edwin.alkins.swingTest.littelGame2.core.action.AbstractAction;
+import edwin.alkins.swingTest.littelGame2.core.action.DefaultActionEntity;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Arc2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Line2DFill;
@@ -26,6 +31,7 @@ public abstract class Entity{
 	protected double angle = 0d;
 	protected double scale = 1d;
 	protected Rectangle2D originalBounds;
+	protected AbstractAction action = new DefaultActionEntity();
 	
 	public Entity(Rectangle2D bounds) {
 		this.originalBounds = bounds;
@@ -55,6 +61,16 @@ public abstract class Entity{
 	}
 	public void setLocation(Point2D p) {
 		this.originalBounds = new Rectangle2D.Double(p.getX(),p.getY(),this.originalBounds.getWidth(),this.originalBounds.getHeight());
+	}
+	public Point2D getLocationCenter() {
+		double widthScaled = (this.originalBounds.getWidth()/2d)*scale;
+		double heightScaled = (this.originalBounds.getHeight()/2d)*scale;
+		return new Point2D.Double(this.originalBounds.getX()+widthScaled, this.originalBounds.getY()+heightScaled);
+	}
+	public void setLocationCenter(Point2D p) {
+		double widthScaled = (this.originalBounds.getWidth()/2d)*scale;
+		double heightScaled = (this.originalBounds.getHeight()/2d)*scale;
+		this.originalBounds = new Rectangle2D.Double(p.getX()-widthScaled,p.getY()-heightScaled,this.originalBounds.getWidth(),this.originalBounds.getHeight());
 	}
 	public List<Rectangle2DFill> getRectangles() {
         return Collections.unmodifiableList(rectangles);
@@ -97,6 +113,26 @@ public abstract class Entity{
 		}
 	};
 	
+	private Shape creatShape() {
+		Area shape = new Area();
+		for(Rectangle2DFill rectangle:rectangles) {
+			shape.add(new Area(rectangle));
+		}
+		for(Arc2DFill arc:arcs) {
+			shape.add(new Area(arc));
+		}
+		for(Line2DFill line:lines) {
+			shape.add(new Area(line));
+		}
+		for(Ellipse2DFill ellipse:ellipses) {
+			shape.add(new Area(ellipse));
+		}
+		for(PolygonFill polygon:polygons) {
+			shape.add(new Area(polygon));
+		}
+		return shape;
+	}
+	
 	public void draw(Graphics2D g) {
 		Graphics2D gEntity = (Graphics2D) g.create();
 		gEntity.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -107,7 +143,7 @@ public abstract class Entity{
 		gEntity.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		AffineTransform at = new AffineTransform();
 		at.translate(getBounds().getX(), getBounds().getY());
-		at.rotate(Math.toRadians(angle), getBounds().getWidth()/2d, getBounds().getHeight()/2d);
+		at.rotate(Math.toRadians(angle), getBounds().getWidth()/2d*scale, getBounds().getHeight()/2d*scale);
 		at.scale(scale, scale);
 		gEntity.setTransform(at);
 		paintEntity(gEntity);
@@ -115,7 +151,14 @@ public abstract class Entity{
 	}
 	
 	public boolean isContaine(Point p) {
-		return this.originalBounds.contains(p);
+		AffineTransform t = new AffineTransform();
+		t.translate(getBounds().getX(), getBounds().getY());
+		t.rotate(Math.toRadians(angle), getBounds().getWidth()/2d*scale, getBounds().getHeight()/2d*scale);
+		t.scale(scale, scale);
+		return t.createTransformedShape(creatShape()).contains(p);
 	}
-	public abstract void update();
+	public abstract void update(long timePass);
+	public AbstractAction getAction() {
+		return this.action;
+	}
 }

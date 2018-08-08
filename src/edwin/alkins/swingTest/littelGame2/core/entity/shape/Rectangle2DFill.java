@@ -2,6 +2,8 @@ package edwin.alkins.swingTest.littelGame2.core.entity.shape;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D.Double;
 
 public class Rectangle2DFill extends Double {

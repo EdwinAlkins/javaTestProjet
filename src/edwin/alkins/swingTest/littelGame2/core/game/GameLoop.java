@@ -1,12 +1,17 @@
 package edwin.alkins.swingTest.littelGame2.core.game;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.Timer;
+
 import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
 import edwin.alkins.swingTest.littelGame2.core.entity.RobotEntity;
+import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
 import edwin.alkins.swingTest.littelGame2.core.util.Tools;
 import edwin.alkins.swingTest.littelGame2.ihm.launcher.FrameOfGameV1;
 
@@ -15,6 +20,7 @@ public class GameLoop implements Runnable {
         private boolean keepRunning = true;
         private List<Entity> entities = new ArrayList<>();
 		private FrameOfGameV1 frame;
+		@SuppressWarnings("unused")
 		private int fps;
 		
 		public GameLoop() {
@@ -23,10 +29,10 @@ public class GameLoop implements Runnable {
 		public void preload() {
 			frame = new FrameOfGameV1();
 			frame.setVisible(true);
-			int size = 100;
+			int size = 10000;
 			for (int i = 0; i < size; i++) {
-				double r1 = Tools.randome(0d, frame.getBounds().getWidth());
-				double r2 = Tools.randome(0d, frame.getBounds().getHeight());
+				double r1 = Tools.randome(0d, frame.getBounds().getWidth()-50);
+				double r2 = Tools.randome(0d, frame.getBounds().getHeight()-50);
 				double a = Tools.randome(0d, 360d);
 				double s = Tools.randome(0.5d, 2d);
 				RobotEntity robot = new RobotEntity();
@@ -38,13 +44,12 @@ public class GameLoop implements Runnable {
 		}
 
 		public void processInput() {
+			EventManager.getInstance().processEvent(entities);
 		}
 
-		public void update() {
+		public void update(long l) {
 			entities.stream().forEach(e -> {
-				e.update();
-				/*e.setAngle(e.getAngle()+0.1d);
-				e.setLocation(new Point2D.Double(e.getLocation().getX()+Tools.randome(-0.5d, 0.5d),e.getLocation().getY()+Tools.randome(-0.5d, 0.5d)));*/
+				e.update(l);
 			});
 			frame.getPanelDisplayArea().setEntity(entities);
 		}
@@ -65,6 +70,7 @@ public class GameLoop implements Runnable {
 
             // Last start of a "second" loop                    
             long loop = System.nanoTime();
+            long beforeTime = System.currentTimeMillis();
             int frameCount = 0;
             // While gaming...
             while (keepRunning) {
@@ -73,8 +79,12 @@ public class GameLoop implements Runnable {
 
                 // Update the state and render the 
                 // current frame...
-    			update();
-                render();
+                long timafter = System.currentTimeMillis();
+                long timePass = timafter - beforeTime;
+                processInput();
+            	update(timafter - beforeTime);
+    			render();
+    			beforeTime = System.currentTimeMillis();
 
                 // How long did that update take??
                 long timeTaken = System.nanoTime();
@@ -94,6 +104,7 @@ public class GameLoop implements Runnable {
 
                 // Calculate if we've being running for a second yet...
                 long loopDelay = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - loop);
+                System.out.println(optimalDelay+" "+delta+" "+delay+" "+loop+" "+loopDelay+" "+timePass);
                 // If the loop has been cycling for a second...
                 if (loopDelay >= 1) {
                     // Reset the loop time

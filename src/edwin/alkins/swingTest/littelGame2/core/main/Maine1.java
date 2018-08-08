@@ -10,6 +10,8 @@ import edwin.alkins.swingTest.littelGame2.core.game.GameLoop;
 public class Maine1 {
 
 	/**
+	 * http://fivedots.coe.psu.ac.th/~ad/jg/
+	 * https://members.loria.fr/VThomas/mediation/JV_IUT_2016/2016_IUT_boucle_jeu.pdf
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
