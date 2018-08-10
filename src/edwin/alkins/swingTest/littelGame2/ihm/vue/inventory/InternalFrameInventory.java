@@ -1,19 +1,15 @@
-package edwin.alkins.swingTest.littelGame2.ihm.launcher.vue.inventory;
+package edwin.alkins.swingTest.littelGame2.ihm.vue.inventory;
 
-import java.awt.EventQueue;
 import java.awt.GridLayout;
 
 import javax.swing.JInternalFrame;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JToggleButton;
 import javax.swing.JScrollPane;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 
 public class InternalFrameInventory extends JInternalFrame {
 	private static final long serialVersionUID = 8921196199831468862L;

@@ -1,61 +1,58 @@
 package edwin.alkins.swingTest.littelGame2.core.game;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.Timer;
-
-import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
+import edwin.alkins.swingTest.littelGame2.core.entity.DefaultEntity;
 import edwin.alkins.swingTest.littelGame2.core.entity.RobotEntity;
 import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
+import edwin.alkins.swingTest.littelGame2.core.physicalEngine.PhysicalEngine;
 import edwin.alkins.swingTest.littelGame2.core.util.Tools;
-import edwin.alkins.swingTest.littelGame2.ihm.launcher.FrameOfGameV1;
+import edwin.alkins.swingTest.littelGame2.core.world.World;
+import edwin.alkins.swingTest.littelGame2.ihm.visualiser.Visualiser;
 
 public class GameLoop implements Runnable {
 
         private boolean keepRunning = true;
-        private List<Entity> entities = new ArrayList<>();
-		private FrameOfGameV1 frame;
+		private PhysicalEngine physicalEngine;
+		private Visualiser visualiser;
 		@SuppressWarnings("unused")
 		private int fps;
 		
 		public GameLoop() {
+			this.physicalEngine = new PhysicalEngine();
 		}
 		
 		public void preload() {
-			frame = new FrameOfGameV1();
-			frame.setVisible(true);
-			int size = 10000;
+			RobotEntity.initialize();
+			DefaultEntity.initialize();
+			World world = new World();
+			this.physicalEngine.setWorld(world);
+			this.visualiser  = new Visualiser(world);
+			int size = 1000;
 			for (int i = 0; i < size; i++) {
-				double r1 = Tools.randome(0d, frame.getBounds().getWidth()-50);
-				double r2 = Tools.randome(0d, frame.getBounds().getHeight()-50);
+				double r1 = Tools.randome(0d, 500d);
+				double r2 = Tools.randome(0d, 500d);
 				double a = Tools.randome(0d, 360d);
 				double s = Tools.randome(0.5d, 2d);
 				RobotEntity robot = new RobotEntity();
 				robot.setLocation(new Point2D.Double(r1,r2));
 				robot.setAngle(a);
 				robot.setScale(s);
-				entities.add(robot);
+				world.addEntity(robot);
 			}
 		}
 
 		public void processInput() {
-			EventManager.getInstance().processEvent(entities);
+			EventManager.getInstance().processEvent(this.physicalEngine.getWorld().getListOfEntities());
 		}
 
 		public void update(long l) {
-			entities.stream().forEach(e -> {
-				e.update(l);
-			});
-			frame.getPanelDisplayArea().setEntity(entities);
+			this.physicalEngine.update(l);
 		}
 
 		public void render() {
-			frame.getPanelDisplayArea().repaint();
+			visualiser.render();
 		}
 
         public void run() {
@@ -79,10 +76,10 @@ public class GameLoop implements Runnable {
 
                 // Update the state and render the 
                 // current frame...
+                processInput();
                 long timafter = System.currentTimeMillis();
                 long timePass = timafter - beforeTime;
-                processInput();
-            	update(timafter - beforeTime);
+            	update(timePass);
     			render();
     			beforeTime = System.currentTimeMillis();
 
@@ -104,7 +101,7 @@ public class GameLoop implements Runnable {
 
                 // Calculate if we've being running for a second yet...
                 long loopDelay = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - loop);
-                System.out.println(optimalDelay+" "+delta+" "+delay+" "+loop+" "+loopDelay+" "+timePass);
+                //System.out.println(optimalDelay+" "+delta+" "+delay+" "+loop+" "+loopDelay+" "+timePass);
                 // If the loop has been cycling for a second...
                 if (loopDelay >= 1) {
                     // Reset the loop time
