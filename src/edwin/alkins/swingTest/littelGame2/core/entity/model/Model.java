@@ -1,6 +1,9 @@
 package edwin.alkins.swingTest.littelGame2.core.entity.model;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
@@ -29,7 +32,7 @@ public class Model {
 	
 	public Model(Rectangle2D bounds) {
 		this.originalBounds = bounds;
-		this.shape = creatShape();
+		updateShape();
 		render();
 	}
 	public Rectangle2D getBounds() {
@@ -82,7 +85,7 @@ public class Model {
 			polygon.draw(g);
 		}
 	};
-	private Shape creatShape() {
+	public void updateShape() {
 		Area shape = new Area();
 		for(Rectangle2DFill rectangle:rectangles) {
 			shape.add(new Area(rectangle));
@@ -99,18 +102,38 @@ public class Model {
 		for(PolygonFill polygon:polygons) {
 			shape.add(new Area(polygon));
 		}
-		return shape;
+		this.shape = shape;
 	}
 	public void render() {
 		this.image = new BufferedImage((int)this.originalBounds.getWidth(), (int)this.originalBounds.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D gEntity = (Graphics2D) image.createGraphics();
+		gEntity.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		gEntity.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		gEntity.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		gEntity.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
+		gEntity.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+		gEntity.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		paintEntity(gEntity);
 		gEntity.dispose();
 	}
 	public Shape getShape(AffineTransform t) {
 		return t.createTransformedShape(this.shape);
 	}
+	public Shape getShape() {
+		return this.shape;
+	}
 	public BufferedImage getImage() {
 		return this.image;
+	}
+	public BufferedImage makeImage(Shape s) {
+	    Rectangle r = s.getBounds();
+	    BufferedImage image = new BufferedImage(r.width, r.height, BufferedImage.TYPE_4BYTE_ABGR);
+	    Graphics2D gr = image.createGraphics();
+	    // move the shape in the region of the image
+	    gr.translate(-r.x, -r.y);
+	    gr.setColor(Color.BLACK);
+	    gr.draw(s);
+	    gr.dispose();
+	    return image;
 	}
 }

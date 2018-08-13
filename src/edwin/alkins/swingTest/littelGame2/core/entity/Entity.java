@@ -1,5 +1,6 @@
 package edwin.alkins.swingTest.littelGame2.core.entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -65,6 +66,8 @@ public abstract class Entity{
 		gEntity.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 		gEntity.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		AffineTransform at = getAffineTransform();
+		/*gEntity.setColor(Color.BLACK);
+		gEntity.draw(this.model.getShape(at));*/
 		gEntity.drawRenderedImage(this.model.getImage(), at);
 		gEntity.dispose();
 	}

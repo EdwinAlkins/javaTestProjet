@@ -39,6 +39,7 @@ public class RobotEntity extends Entity {
 			m.addEllipse2D(new Ellipse2DFill(10d, 8d, 4d, 4d).setDrawnBorder(false).setFillColor(Color.green));
 			m.addEllipse2D(new Ellipse2DFill(18d, 8d, 4d, 4d).setDrawnBorder(false).setFillColor(Color.green));
 			m.render();
+			m.updateShape();
 			EntityModel instance = EntityModel.getInstance();
 			id = instance.getNewId();
 			instance.linkModel(id, m);

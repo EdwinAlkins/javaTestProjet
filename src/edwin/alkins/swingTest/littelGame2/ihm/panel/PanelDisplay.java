@@ -1,5 +1,6 @@
 package edwin.alkins.swingTest.littelGame2.ihm.panel;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -29,13 +30,8 @@ public class PanelDisplay extends JPanel implements MouseListener, KeyListener{
 		setLayout(null);
 		this.setFocusable(true);
 		this.setIgnoreRepaint(true);
+		this.setDoubleBuffered(true);
 	}
-	
-	/*@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(image, 0, 0, null);
-	}*/
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -54,12 +50,12 @@ public class PanelDisplay extends JPanel implements MouseListener, KeyListener{
 
 	public void render() {
 		this.image = getImageRenderer(world.getListOfEntities());
-		//repaint();
 		getGraphics().drawImage(image, 0, 0, null);
 	}
 	public BufferedImage getImageRenderer(List<Entity> entities) {
 		BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g2D = img.createGraphics();
+		g2D.fillRect(0, 0, img.getWidth(), img.getHeight());
 		for(Entity entity:entities) {
 			entity.draw(g2D);			
 		}

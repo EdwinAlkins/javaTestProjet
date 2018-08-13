@@ -26,6 +26,7 @@ public class DefaultEntity extends Entity {
 
 			m.addEllipse2D(new Ellipse2DFill(0, 0, bounds.getWidth()/2d, bounds.getHeight()/2d));
 			m.render();
+			m.updateShape();
 			EntityModel instance = EntityModel.getInstance();
 			id = instance.getNewId();
 			instance.linkModel(id, m);
