@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import edwin.alkins.swingTest.littelGame2.core.world.World;
+import edwin.alkins.swingTest.littelGame2.ihm.camera.Camera;
 import edwin.alkins.swingTest.littelGame2.ihm.panel.PanelDisplay;
 
 public class FrameOfGameV1 extends JFrame {
@@ -15,8 +16,9 @@ public class FrameOfGameV1 extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param camera 
 	 */
-	public FrameOfGameV1(World world) {
+	public FrameOfGameV1(World world, Camera camera) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -24,7 +26,7 @@ public class FrameOfGameV1 extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		panelDisplay = new PanelDisplay(world);
+		panelDisplay = new PanelDisplay(world,camera);
 		contentPane.add(panelDisplay, BorderLayout.CENTER);
 	}
 

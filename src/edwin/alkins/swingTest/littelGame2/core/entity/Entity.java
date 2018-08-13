@@ -1,9 +1,8 @@
 package edwin.alkins.swingTest.littelGame2.core.entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -57,30 +56,27 @@ public abstract class Entity{
 		double heightScaled = (this.originalBounds.getHeight()/2d)*scale;
 		this.originalBounds = new Rectangle2D.Double(p.getX()-widthScaled,p.getY()-heightScaled,this.originalBounds.getWidth(),this.originalBounds.getHeight());
 	}
-	public void draw(Graphics2D g) {
+	public AffineTransform getAffineTransform() {
+		return getAffineTransform(new Point2D.Double(0d, 0d),1d,1d);
+	}
+	public void draw(Graphics2D g, Point2D positionCam,double scaledW, double scaledH) {
 		Graphics2D gEntity = (Graphics2D) g.create();
-		gEntity.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		gEntity.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		gEntity.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-		gEntity.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
-		gEntity.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-		gEntity.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-		AffineTransform at = getAffineTransform();
-		/*gEntity.setColor(Color.BLACK);
-		gEntity.draw(this.model.getShape(at));*/
-		gEntity.drawRenderedImage(this.model.getImage(), at);
+		AffineTransform at = getAffineTransform(positionCam,scaledW,scaledH);
+		this.model.render(gEntity, at);
 		gEntity.dispose();
 	}
-	public AffineTransform getAffineTransform() {
+	public AffineTransform getAffineTransform(Point2D positionCam, double scaledW, double scaledH) {
 		AffineTransform at = new AffineTransform();
-		at.translate(getBounds().getX(), getBounds().getY());
-		at.rotate(Math.toRadians(angle), getBounds().getWidth()/2d*scale, getBounds().getHeight()/2d*scale);
-		at.scale(scale, scale);
+		at.translate((getBounds().getX()-positionCam.getX())*scaledW, (getBounds().getY()-positionCam.getY())*scaledH);
+		at.rotate(Math.toRadians(angle), getBounds().getWidth()/2d*scale*scaledW, getBounds().getHeight()/2d*scale*scaledH);
+		at.scale(scale*scaledW, scale*scaledH);
 		return at;
 	}
-	
 	public boolean isContaine(Point p) {
 		return this.model.getShape(getAffineTransform()).contains(p);
+	}
+	public Shape getShape() {
+		return this.model.getShape(getAffineTransform());
 	}
 	public abstract void update(long timePass);
 	public AbstractAction getAction() {

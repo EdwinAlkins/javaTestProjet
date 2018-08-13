@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
+import edwin.alkins.swingTest.littelGame2.ihm.camera.Camera;
 
 public class EventManager {
 
 	private static EventManager instance = null;
 	private EventMouse eventMouse = new EventMouse();
 	private EventKey eventKey = new EventKey();
+	private Camera camera;
 
 	private EventManager() {
 	}
@@ -23,13 +25,15 @@ public class EventManager {
 			instance = new EventManager();
 		return instance;
 	}
-	
+	public void setCamera(Camera camera) {
+		this.camera = camera;
+	}
 	public void processEvent(List<Entity> entities) {
 		this.eventMouse.process(entities);
-		this.eventKey.process(this.eventMouse.getListOfEntitiesHasSelected());
+		this.eventKey.process();
 	}
-	public void setMouseEventPress(MouseEvent e) {
-		this.eventMouse.setEvent(e);			
+	public void setMouseEventPress(int button, boolean isControlDown, Point position) {
+		this.eventMouse.setEvent(button,isControlDown,position);			
 	}
 	public void setKeyEvent(KeyEvent e) {
 		this.eventKey.setEvent(e);
@@ -41,10 +45,10 @@ public class EventManager {
 		private Point position = new Point(0, 0);
 		private List<Entity> listOfEntitiesHasSelected = new ArrayList<Entity>();
 		
-		public void setEvent(MouseEvent e) {
-			this.button = e.getButton();
-			this.isControlDown = e.isControlDown();
-			this.position = e.getPoint();
+		public void setEvent(int button, boolean isControlDown, Point position) {
+			this.button = button;
+			this.isControlDown = isControlDown;
+			this.position = position;
 		}
 		public void process(List<Entity> entities) {
 			if(this.button == MouseEvent.BUTTON1) {
@@ -80,24 +84,21 @@ public class EventManager {
 		public void setEvent(KeyEvent e) {
 			this.key = e.getKeyCode();
 		}
-		public void process(List<Entity> entities) {
+		public void process() {
 			Point2D mouve = new Point2D.Double(0,0);
 			if(this.key == KeyEvent.VK_0)
-				mouve.setLocation(0,-0.5d);
+				mouve.setLocation(0,-10d);
 			if(this.key == KeyEvent.VK_UP)
-				mouve.setLocation(0,-0.5d);
+				mouve.setLocation(0,-10d);
 			else if(this.key == KeyEvent.VK_DOWN)
-				mouve.setLocation(0,0.5d);
+				mouve.setLocation(0,10d);
 			else if(this.key == KeyEvent.VK_LEFT)
-				mouve.setLocation(-0.5d,0);
+				mouve.setLocation(-10d,0);
 			else if(this.key == KeyEvent.VK_RIGHT)
-				mouve.setLocation(0.5d,0);
+				mouve.setLocation(10d,0);
 			if(!mouve.equals(new Point2D.Double(0,0))) {
-				entities.stream().forEach(
-					entity -> {
-						entity.setLocation(new Point2D.Double(entity.getLocation().getX()+mouve.getX(),entity.getLocation().getY()+mouve.getY()));
-					}
-				);
+				Point2D.Double p = new Point2D.Double(camera.getLocation().getX()+mouve.getX(),camera.getLocation().getY()+mouve.getY());
+				camera.setLocation(p);
 			}
 			this.key = -1;
 		}

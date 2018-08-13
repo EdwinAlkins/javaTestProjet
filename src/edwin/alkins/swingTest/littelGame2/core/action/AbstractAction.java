@@ -44,8 +44,7 @@ public abstract class AbstractAction {
 			if(Math.floor(distance) != 0) {
 				this.currentAngle = getAngle(point2d,target);
 				p = new Point2D.Double(point2d.getX()+tx,point2d.getY()+ty);
-			}
-			else {
+			} else {
 				p = this.target;
 			}
 			this.currentPoint = p;

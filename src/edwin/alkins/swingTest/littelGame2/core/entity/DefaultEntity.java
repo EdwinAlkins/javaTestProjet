@@ -4,8 +4,7 @@ import java.awt.geom.Rectangle2D;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.model.EntityModel;
 import edwin.alkins.swingTest.littelGame2.core.entity.model.Model;
-import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
-import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
+import edwin.alkins.swingTest.littelGame2.core.entity.shape.PolygonFill;
 import edwin.alkins.swingTest.littelGame2.core.inventory.Inventory;
 
 public class DefaultEntity extends Entity {
@@ -18,13 +17,14 @@ public class DefaultEntity extends Entity {
 		this.inventory = new Inventory(10);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void initialize() {
 		if(id == -1) {
-			Rectangle2D.Double bounds = new Rectangle2D.Double(0, 0, 32d, 26d);
+			Rectangle2D.Double bounds = new Rectangle2D.Double(0, 0, 34d, 34d);
 			Model m = new Model(bounds);
-			m.addRectangle2D(new Rectangle2DFill(0, 0, bounds.getWidth()/2d, bounds.getHeight()/2d));
 
-			m.addEllipse2D(new Ellipse2DFill(0, 0, bounds.getWidth()/2d, bounds.getHeight()/2d));
+			m.addPolygon(new PolygonFill(new int[] {0,2,4,30,32,34,15},new int[] {0,30,34,30,34,15},6));
+			
 			m.render();
 			m.updateShape();
 			EntityModel instance = EntityModel.getInstance();

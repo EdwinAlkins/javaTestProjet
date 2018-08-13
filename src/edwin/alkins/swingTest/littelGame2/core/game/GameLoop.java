@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.concurrent.TimeUnit;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.DefaultEntity;
+import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
 import edwin.alkins.swingTest.littelGame2.core.entity.RobotEntity;
 import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
 import edwin.alkins.swingTest.littelGame2.core.physicalEngine.PhysicalEngine;
@@ -28,14 +29,14 @@ public class GameLoop implements Runnable {
 			DefaultEntity.initialize();
 			World world = new World();
 			this.physicalEngine.setWorld(world);
-			this.visualiser  = new Visualiser(world);
+			this.visualiser = new Visualiser(world);
 			int size = 10000;
 			for (int i = 0; i < size; i++) {
 				double r1 = Tools.randome(0d, 500d);
 				double r2 = Tools.randome(0d, 500d);
 				double a = Tools.randome(0d, 360d);
-				double s = Tools.randome(0.5d, 2d);
-				RobotEntity robot = new RobotEntity();
+				//double s = Tools.randome(0.5d, 2d);
+				Entity robot = new RobotEntity();
 				robot.setLocation(new Point2D.Double(r1,r2));
 				robot.setAngle(a);
 				robot.setScale(2);
@@ -101,7 +102,7 @@ public class GameLoop implements Runnable {
 
                 // Calculate if we've being running for a second yet...
                 long loopDelay = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - loop);
-                System.out.println(optimalDelay+" "+delta+" "+delay+" "+loop+" "+loopDelay+" "+timePass);
+                //System.out.println(optimalDelay+" "+delta+" "+delay+" "+loop+" "+loopDelay+" "+timePass);
                 // If the loop has been cycling for a second...
                 if (loopDelay >= 1) {
                     // Reset the loop time

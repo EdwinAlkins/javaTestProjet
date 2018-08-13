@@ -1,45 +1,67 @@
 package edwin.alkins.swingTest.littelGame2.ihm.panel;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.function.Consumer;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.MemoryCacheImageInputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.swing.JPanel;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
 import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
 import edwin.alkins.swingTest.littelGame2.core.world.World;
+import edwin.alkins.swingTest.littelGame2.ihm.camera.Camera;
 
-public class PanelDisplay extends JPanel implements MouseListener, KeyListener{
+public class PanelDisplay extends JPanel implements MouseListener, KeyListener, MouseWheelListener{
 
 	private static final long serialVersionUID = -1345297621672577495L;
 	private World world;
 	private BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
+	private Camera camera;
 	
-	public PanelDisplay(World world) {
+	public PanelDisplay(World world, Camera camera) {
 		this.world = world;
+		this.camera = camera;
 		this.addMouseListener(this);
 		this.addKeyListener(this);
+		this.addMouseWheelListener(this);
 		setLayout(null);
 		this.setFocusable(true);
 		this.setIgnoreRepaint(true);
 		this.setDoubleBuffered(true);
 	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {
-		EventManager.getInstance().setMouseEventPress(e);
+		int button = e.getButton();
+		boolean isControlDown = e.isControlDown();
+		Point position = e.getPoint();
+		int x = (int)Math.round((double)position.x*((double)this.camera.getWidth()/(double)getWidth())+this.camera.getX());
+		int y = (int)Math.round((double)position.y*((double)this.camera.getHeight()/(double)getHeight())+this.camera.getY());
+		position = new Point(x, y);
+		System.out.println(position);
+		EventManager.getInstance().setMouseEventPress(button,isControlDown,position);
 	}
 	public void mouseReleased(MouseEvent e) {}
 	public void keyPressed(KeyEvent e) {
@@ -47,18 +69,16 @@ public class PanelDisplay extends JPanel implements MouseListener, KeyListener{
 	}
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		double w = this.camera.getWidth() + this.camera.getWidth()/100*e.getPreciseWheelRotation();
+		double h = this.camera.getHeight() + this.camera.getHeight()/100*e.getPreciseWheelRotation();
+		this.camera.setBounds(w, h);
+	}
 
 	public void render() {
-		this.image = getImageRenderer(world.getListOfEntities());
-		getGraphics().drawImage(image, 0, 0, null);
-	}
-	public BufferedImage getImageRenderer(List<Entity> entities) {
-		BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D g2D = img.createGraphics();
-		g2D.fillRect(0, 0, img.getWidth(), img.getHeight());
-		for(Entity entity:entities) {
-			entity.draw(g2D);			
-		}
-		return img;
+		//this.image = camera.getImageRenderer(world);
+		this.image = camera.getImageRenderer(world, getSize());
+		getGraphics().drawImage(image, 0, 0, getWidth(), getHeight(), null);
 	}
 }

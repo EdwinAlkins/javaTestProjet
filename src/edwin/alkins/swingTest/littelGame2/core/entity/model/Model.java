@@ -1,9 +1,9 @@
 package edwin.alkins.swingTest.littelGame2.core.entity.model;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
@@ -18,6 +18,7 @@ import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Line2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.PolygonFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
+import edwin.alkins.swingTest.littelGame2.core.util.GlobalProperty;
 
 public class Model {
 
@@ -104,17 +105,23 @@ public class Model {
 		}
 		this.shape = shape;
 	}
+	/**
+	 * @deprecated slower
+	 */
 	public void render() {
-		this.image = new BufferedImage((int)this.originalBounds.getWidth(), (int)this.originalBounds.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		this.image = new BufferedImage((int)this.originalBounds.getWidth(), (int)this.originalBounds.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D gEntity = (Graphics2D) image.createGraphics();
-		gEntity.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		gEntity.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		gEntity.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-		gEntity.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
-		gEntity.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-		gEntity.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 		paintEntity(gEntity);
 		gEntity.dispose();
+	}
+	public void render(Graphics2D gEntity, AffineTransform at) {
+		if(GlobalProperty.getInstance().performance == 0) {
+			gEntity.setColor(Color.BLACK);
+			gEntity.draw(getShape(at));
+		} else {
+			gEntity.setTransform(at);
+			paintEntity(gEntity);
+		}
 	}
 	public Shape getShape(AffineTransform t) {
 		return t.createTransformedShape(this.shape);
@@ -127,7 +134,7 @@ public class Model {
 	}
 	public BufferedImage makeImage(Shape s) {
 	    Rectangle r = s.getBounds();
-	    BufferedImage image = new BufferedImage(r.width, r.height, BufferedImage.TYPE_4BYTE_ABGR);
+	    BufferedImage image = new BufferedImage(r.width, r.height, BufferedImage.TYPE_3BYTE_BGR);
 	    Graphics2D gr = image.createGraphics();
 	    // move the shape in the region of the image
 	    gr.translate(-r.x, -r.y);
