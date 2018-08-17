@@ -1,31 +1,15 @@
 package edwin.alkins.swingTest.littelGame2.ihm.panel;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.function.Consumer;
-
-import javax.imageio.ImageIO;
-import javax.imageio.stream.MemoryCacheImageInputStream;
-import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.swing.JPanel;
 
-import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
 import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
 import edwin.alkins.swingTest.littelGame2.core.world.World;
 import edwin.alkins.swingTest.littelGame2.ihm.camera.Camera;
@@ -60,7 +44,6 @@ public class PanelDisplay extends JPanel implements MouseListener, KeyListener, 
 		int x = (int)Math.round((double)position.x*((double)this.camera.getWidth()/(double)getWidth())+this.camera.getX());
 		int y = (int)Math.round((double)position.y*((double)this.camera.getHeight()/(double)getHeight())+this.camera.getY());
 		position = new Point(x, y);
-		System.out.println(position);
 		EventManager.getInstance().setMouseEventPress(button,isControlDown,position);
 	}
 	public void mouseReleased(MouseEvent e) {}
@@ -77,7 +60,6 @@ public class PanelDisplay extends JPanel implements MouseListener, KeyListener, 
 	}
 
 	public void render() {
-		//this.image = camera.getImageRenderer(world);
 		this.image = camera.getImageRenderer(world, getSize());
 		getGraphics().drawImage(image, 0, 0, getWidth(), getHeight(), null);
 	}

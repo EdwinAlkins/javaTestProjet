@@ -2,7 +2,6 @@ package edwin.alkins.swingTest.littelGame2.ihm.camera;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
@@ -65,19 +64,22 @@ public class Camera {
 	}
 	public BufferedImage getImageRenderer(World w, Dimension dimension) {
 		BufferedImage buffimage = new BufferedImage((int)Math.round(dimension.getWidth()),(int)Math.round(dimension.getHeight()), BufferedImage.TYPE_3BYTE_BGR);
-		
 		Graphics2D g2D = (Graphics2D) buffimage.createGraphics();
 		g2D.setBackground(Color.WHITE);
 		g2D.clearRect(0, 0, (int) Math.round(dimension.getWidth()), (int) Math.round(dimension.getHeight()));
 		double scaledW = dimension.getWidth()/this.getWidth();
 		double scaledH = dimension.getHeight()/this.getHeight();
 		Point2D location = getLocation();
+		
+		Graphics2D entitiesGraphs = (Graphics2D) g2D.create();
 		Consumer<Entity> consumer = new Consumer<Entity>() {
 			public void accept(Entity entity) {
-				entity.draw(g2D,location,scaledW,scaledH);
+				entity.draw(entitiesGraphs,location,scaledW,scaledH);
 			}
 		};
 		w.getListOfEntities(this.x,this.y,this.width,this.height).stream().forEach(consumer);
+		entitiesGraphs.dispose();
+		
 		g2D.dispose();
 		return buffimage;
 	}

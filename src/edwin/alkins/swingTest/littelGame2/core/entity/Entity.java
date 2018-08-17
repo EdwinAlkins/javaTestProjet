@@ -59,11 +59,9 @@ public abstract class Entity{
 	public AffineTransform getAffineTransform() {
 		return getAffineTransform(new Point2D.Double(0d, 0d),1d,1d);
 	}
-	public void draw(Graphics2D g, Point2D positionCam,double scaledW, double scaledH) {
-		Graphics2D gEntity = (Graphics2D) g.create();
+	public void draw(Graphics2D gEntity, Point2D positionCam,double scaledW, double scaledH) {
 		AffineTransform at = getAffineTransform(positionCam,scaledW,scaledH);
 		this.model.render(gEntity, at);
-		gEntity.dispose();
 	}
 	public AffineTransform getAffineTransform(Point2D positionCam, double scaledW, double scaledH) {
 		AffineTransform at = new AffineTransform();

@@ -1,7 +1,6 @@
 package edwin.alkins.swingTest.littelGame2.core.entity.model;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;

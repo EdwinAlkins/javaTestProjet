@@ -14,7 +14,7 @@ public class Visualiser {
 	
 	public Visualiser(World world) {
 		this.world = world;
-		this.camera = new Camera(0,0,4000,4000);
+		this.camera = new Camera(0,0,1000,1000);
 		EventManager.getInstance().setCamera(camera);
 		this.frame = new FrameOfGameV1(world,camera);
 		frame.setVisible(true);
