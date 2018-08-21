@@ -1,7 +1,6 @@
 package edwin.alkins.swingTest.littelGame2.core.game;
 
 import java.awt.geom.Point2D;
-import java.util.concurrent.TimeUnit;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.DefaultEntity;
 import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
@@ -56,7 +55,7 @@ public class GameLoop implements Runnable {
 			visualiser.render();
 		}
 
-        public void run() {
+        /*public void run() {
         	preload();
             // Calculate the optimal/maximum delay time
             // This is converted to nanos so it can be 
@@ -115,5 +114,47 @@ public class GameLoop implements Runnable {
                     frameCount++;
                 }
             }
-        }
+        }*/
+		public void run() {
+			System.setProperty("sun.java2d.opengl", "true");
+			preload();
+			int TICKSPERS = 60;
+			boolean ISFRAMECAPPED = false;
+			// Tick counter variable
+			long lastTime = System.nanoTime();
+			// Nanoseconds per Tick
+			double nsPerTick = 1000000000D / TICKSPERS;
+			int frames = 0;
+			int ticks = 0;
+			long fpsTimer = System.currentTimeMillis();
+			long beforeTime = System.currentTimeMillis();
+			double delta = 0;
+			boolean shouldRender;
+			while (keepRunning) {
+				shouldRender = !ISFRAMECAPPED;
+				long now = System.nanoTime();
+				delta += (now - lastTime) / nsPerTick;
+				lastTime = now;
+				// if it should tick it does this
+				while (delta >= 1) {
+					ticks++;
+					processInput();
+					long timePass = System.currentTimeMillis() - beforeTime;
+	            	update(timePass);
+					beforeTime = System.currentTimeMillis();
+					delta -= 1;
+					shouldRender = true;
+				}
+				if (shouldRender) {
+					frames++;
+					render();
+				}
+				if (fpsTimer < System.currentTimeMillis() - 1000) {
+					System.out.println(ticks + " ticks, " + frames + " frames");
+					ticks = 0;
+					frames = 0;
+					fpsTimer = System.currentTimeMillis();
+				}
+			}
+		}
     }

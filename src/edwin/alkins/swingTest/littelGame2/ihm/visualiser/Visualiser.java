@@ -2,8 +2,8 @@ package edwin.alkins.swingTest.littelGame2.ihm.visualiser;
 
 import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
 import edwin.alkins.swingTest.littelGame2.core.world.World;
+import edwin.alkins.swingTest.littelGame2.ihm.Windows.FrameOfGameV1;
 import edwin.alkins.swingTest.littelGame2.ihm.camera.Camera;
-import edwin.alkins.swingTest.littelGame2.ihm.launcher.FrameOfGameV1;
 
 public class Visualiser {
 

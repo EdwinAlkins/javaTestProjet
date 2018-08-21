@@ -63,7 +63,10 @@ public class Camera {
 		return image;
 	}
 	public BufferedImage getImageRenderer(World w, Dimension dimension) {
-		BufferedImage buffimage = new BufferedImage((int)Math.round(dimension.getWidth()),(int)Math.round(dimension.getHeight()), BufferedImage.TYPE_3BYTE_BGR);
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsConfiguration gc = ge.getDefaultScreenDevice().getDefaultConfiguration();
+		BufferedImage buffimage = gc.createCompatibleImage((int)Math.round(dimension.getWidth()),(int)Math.round(dimension.getHeight()));
+		buffimage.setAccelerationPriority(1);
 		Graphics2D g2D = (Graphics2D) buffimage.createGraphics();
 		g2D.setBackground(Color.WHITE);
 		g2D.clearRect(0, 0, (int) Math.round(dimension.getWidth()), (int) Math.round(dimension.getHeight()));
@@ -82,6 +85,24 @@ public class Camera {
 		
 		g2D.dispose();
 		return buffimage;
+	}
+	public void getDrawRenderer(World w, Graphics2D g2D,Dimension dimension) {
+		g2D.setBackground(Color.WHITE);
+		g2D.clearRect(0, 0, (int) Math.round(dimension.getWidth()), (int) Math.round(dimension.getHeight()));
+		double scaledW = dimension.getWidth()/this.getWidth();
+		double scaledH = dimension.getHeight()/this.getHeight();
+		Point2D location = getLocation();
+		
+		Graphics2D entitiesGraphs = (Graphics2D) g2D.create();
+		Consumer<Entity> consumer = new Consumer<Entity>() {
+			public void accept(Entity entity) {
+				entity.draw(entitiesGraphs,location,scaledW,scaledH);
+			}
+		};
+		w.getListOfEntities(this.x,this.y,this.width,this.height).stream().forEach(consumer);
+		entitiesGraphs.dispose();
+		
+		g2D.dispose();
 	}
 	public double getX() {
 		return this.x;
