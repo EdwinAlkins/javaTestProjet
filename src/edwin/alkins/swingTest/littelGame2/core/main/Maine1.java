@@ -15,6 +15,9 @@ public class Maine1 {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		System.setProperty("performance", "1");
+		System.setProperty("fullScrean", "false");
+		System.setProperty("isFrame", "false");
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException

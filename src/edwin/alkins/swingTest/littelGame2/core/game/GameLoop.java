@@ -16,8 +16,7 @@ public class GameLoop implements Runnable {
         private boolean keepRunning = true;
 		private PhysicalEngine physicalEngine;
 		private Visualiser visualiser;
-		@SuppressWarnings("unused")
-		private int fps;
+		public static int fps = 0;
 		
 		public GameLoop() {
 			this.physicalEngine = new PhysicalEngine();
@@ -119,7 +118,7 @@ public class GameLoop implements Runnable {
 			System.setProperty("sun.java2d.opengl", "true");
 			preload();
 			int TICKSPERS = 60;
-			boolean ISFRAMECAPPED = false;
+			boolean ISFRAMECAPPED = true;
 			// Tick counter variable
 			long lastTime = System.nanoTime();
 			// Nanoseconds per Tick
@@ -151,6 +150,7 @@ public class GameLoop implements Runnable {
 				}
 				if (fpsTimer < System.currentTimeMillis() - 1000) {
 					System.out.println(ticks + " ticks, " + frames + " frames");
+					fps = frames;
 					ticks = 0;
 					frames = 0;
 					fpsTimer = System.currentTimeMillis();

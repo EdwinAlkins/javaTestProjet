@@ -1,5 +1,7 @@
 package edwin.alkins.swingTest.littelGame2.ihm.visualiser;
 
+import javax.swing.JWindow;
+
 import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
 import edwin.alkins.swingTest.littelGame2.core.world.World;
 import edwin.alkins.swingTest.littelGame2.ihm.Windows.FrameOfGameV1;

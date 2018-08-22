@@ -1,6 +1,9 @@
 package edwin.alkins.swingTest.littelGame2.ihm.panel;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -10,6 +13,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import edwin.alkins.swingTest.littelGame2.core.event.EventManager;
 import edwin.alkins.swingTest.littelGame2.core.world.World;
@@ -34,8 +38,12 @@ public class PanelDisplay extends JPanel implements MouseListener, KeyListener, 
 		this.setDoubleBuffered(true);
 	}
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 	}
+	@Override
+	public void mouseClicked(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {
@@ -61,7 +69,8 @@ public class PanelDisplay extends JPanel implements MouseListener, KeyListener, 
 	}
 
 	public void render() {
-		this.image = camera.getImageRenderer(world, getSize());
-		getGraphics().drawImage(image, 0, 0, getWidth(), getHeight(), null);
+    	this.image = camera.getImageRenderer(world, getSize());
+    	repaint();
+		//getGraphics().drawImage(image, 0, 0, getWidth(), getHeight(), null);
 	}
 }

@@ -17,7 +17,6 @@ import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Line2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.PolygonFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
-import edwin.alkins.swingTest.littelGame2.core.util.GlobalProperty;
 
 public class Model {
 
@@ -114,7 +113,7 @@ public class Model {
 		gEntity.dispose();
 	}
 	public void render(Graphics2D gEntity, AffineTransform at) {
-		if(GlobalProperty.getInstance().performance == 0) {
+		if(new Integer(System.getProperty("performance"))==0) {
 			gEntity.setColor(Color.BLACK);
 			gEntity.draw(getShape(at));
 		} else {

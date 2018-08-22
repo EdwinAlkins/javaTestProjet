@@ -7,10 +7,12 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.Entity;
+import edwin.alkins.swingTest.littelGame2.core.game.GameLoop;
 import edwin.alkins.swingTest.littelGame2.core.world.World;
 
 public class Camera {
@@ -65,7 +67,7 @@ public class Camera {
 	public BufferedImage getImageRenderer(World w, Dimension dimension) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsConfiguration gc = ge.getDefaultScreenDevice().getDefaultConfiguration();
-		BufferedImage buffimage = gc.createCompatibleImage((int)Math.round(dimension.getWidth()),(int)Math.round(dimension.getHeight()));
+		BufferedImage buffimage = gc.createCompatibleImage((int)Math.round((dimension.getWidth()<=0)?1:dimension.getWidth()),(int)Math.round((dimension.getHeight()<=0)?1:dimension.getHeight()));
 		buffimage.setAccelerationPriority(1);
 		Graphics2D g2D = (Graphics2D) buffimage.createGraphics();
 		g2D.setBackground(Color.WHITE);
@@ -83,6 +85,10 @@ public class Camera {
 		w.getListOfEntities(this.x,this.y,this.width,this.height).stream().forEach(consumer);
 		entitiesGraphs.dispose();
 		
+		String strFps = "fps:"+GameLoop.fps;
+		Rectangle2D r = g2D.getFontMetrics().getStringBounds(strFps, g2D);
+		g2D.setColor(Color.BLACK);
+		g2D.drawString(strFps, (float)(dimension.getWidth()-r.getWidth()), (float)(dimension.getHeight()-g2D.getFontMetrics().getDescent()));
 		g2D.dispose();
 		return buffimage;
 	}
