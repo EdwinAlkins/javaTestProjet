@@ -1,6 +1,7 @@
 package edwin.alkins.swingTest.littelGame2.core.entity;
 
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import edwin.alkins.swingTest.littelGame2.core.entity.model.EntityModel;
@@ -8,6 +9,9 @@ import edwin.alkins.swingTest.littelGame2.core.entity.model.Model;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Ellipse2DFill;
 import edwin.alkins.swingTest.littelGame2.core.entity.shape.Rectangle2DFill;
 import edwin.alkins.swingTest.littelGame2.core.inventory.Inventory;
+import edwin.alkins.swingTest.littelGame2.core.physicalEngine.cinematique.Mobile2D;
+import edwin.alkins.swingTest.littelGame2.core.physicalEngine.cinematique.Vecteur;
+import edwin.alkins.swingTest.littelGame2.core.physicalEngine.cinematique.Vecteur.Coordonee;
 
 /**
  * ^super..*.add.new.(.*)Fill(.*).setDrawnBorder.*.setFillColor.(Color.*)\)\);.*
@@ -19,11 +23,13 @@ import edwin.alkins.swingTest.littelGame2.core.inventory.Inventory;
 public class RobotEntity extends Entity {
 
 	protected Inventory inventory;
+	private Mobile2D m;
 	public static int id = -1;
 
 	public RobotEntity() {
 		super(id);
 		this.inventory = new Inventory(10);
+		m = new Mobile2D(0.1, 0, new Vecteur(0, 0), new Vecteur(0, 0), new Vecteur(0, 0));
 	}
 
 	public static void initialize() {
@@ -48,8 +54,30 @@ public class RobotEntity extends Entity {
 
 	@Override
 	public void update(long timePass) {
-		this.action.mouveToTarget(getLocationCenter(), 10, timePass);
-		setLocationCenter(this.action.getPoint());
-		setAngle(this.action.getAngle());
+		if(action.getTarget() != null) {
+	        double tmpAngle = getAngle(getLocationCenter(),action.getTarget());
+	        m.setVectP(new Vecteur(getLocationCenter().getX(), getLocationCenter().getY()));
+	        m.setAngle(tmpAngle);
+			m.actualiser(timePass);
+	        Point2D p = m.getPosition();
+	        double d1 = p.distance(getLocationCenter());
+	        double d2 = p.distance(action.getTarget());
+	        if(d1>=d2) {
+	        	p = action.getTarget();
+	        	action.setTarget(null);
+	        }
+	        setAngle(convertAngleToGame(tmpAngle));
+	        setLocationCenter(p);
+		}
+	}
+	
+	public double convertAngleToGame(double angle) {
+		angle = Math.PI/2.0 + Math.toRadians(angle);
+		return Math.toDegrees(angle);
+	}
+	
+	public double getAngle(Point2D centerPt, Point2D targetPt) {
+	    double theta = Math.atan2(targetPt.getY() - centerPt.getY(),targetPt.getX() - centerPt.getX());
+		return Math.toDegrees(theta);
 	}
 }

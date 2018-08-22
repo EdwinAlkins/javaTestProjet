@@ -9,7 +9,7 @@ import java.util.Map;
 
 public abstract class AbstractAction {
 
-	protected Point target;
+	protected Point2D target;
 	protected Point2D currentPoint;
 	protected double currentAngle;
 	
@@ -61,5 +61,8 @@ public abstract class AbstractAction {
 	}
 	public double getAngle() {
 		return this.currentAngle;
+	}
+	public Point2D getTarget() {
+		return this.target;
 	}
 }
